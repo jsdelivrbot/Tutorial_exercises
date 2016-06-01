@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">beerAdvisor</string>
+    <string name="action_settings">Settings</string>
+    <string name="find_beer">Find Beer!</string>
+    <string name="Brands"></string>
+    <string-array name="beer_strengths">
+        <item>Below 4%</item>
+        <item>4% to 4.5%</item>
+        <item>5% to 5.5%</item>
+        <item>Over 5%</item>
+    </string-array>
+
+</resources>

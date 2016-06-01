@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">layoutPractice</string>
+    <string name="title_activity_linear_layout">linearLayout</string>
+    <string name="title_activity_recorder">recorder</string>
+    <string-array name="spinner_values">
+        <item>Text Message</item>
+        <item>Email</item>
+        <item>Phone Call</item>
+        <item>Online SysLog</item>
+    </string-array>
+</resources>
