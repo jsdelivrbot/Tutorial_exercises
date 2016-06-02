@@ -11,6 +11,7 @@ var Stream = React.createClass({
           }
      },
 
+     //passes this.handleNewTweet as a call back function
      componentDidMount: function(){
           SnapkiteStreamClient.initializeStream(this.handleNewTweet);
      },
