@@ -20,3 +20,8 @@ var Home = React.createClass({
 });
 
 module.exports = Home;
+
+/*
+Whenever someone clicks on the link component they will be taken to whatever route
+is
+*/

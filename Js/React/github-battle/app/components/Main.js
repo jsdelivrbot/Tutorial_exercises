@@ -19,3 +19,8 @@ var Main = React.createClass({
 });
 
 module.exports = Main;
+
+/*
+this.props.children will render the children in the routes section
+
+*/

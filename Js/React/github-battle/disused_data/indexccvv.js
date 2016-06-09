@@ -65,3 +65,33 @@ var Avatar = React.createClass({
 
 //add the main class and pass object USER_DATA for children to access
 ReactDOM.render(<Avatar user={USER_DATA}/>, document.getElementById('app'));
+
+
+
+contextTypes: {
+     router: React.PropTypes.object.isRequired
+},
+getIntialState: function(){
+          return {
+               username: 'a'
+
+          }
+},
+onUpdateUser: function(e){
+     this.setState({
+          username:  e.target.value
+     });
+},
+onSubmitUser: function(e){
+     e.preventDefault();
+     var uName = this.state.username;
+     this.setState({
+          username: ''
+     });
+     if (this.props.routeParams.playerOne){
+          console.log(this.context);
+     } else {
+          console.log(this.context);
+     }
+
+},

@@ -1,30 +1,72 @@
 var React = require('react');
 var transparentBg = require('../styles').transparentBg;
+var Prompt = require('../components/Prompt');
 
 var PromptContainer = React.createClass({
+
+     contextTypes: {
+          router: React.PropTypes.object.isRequired
+     },
+
+     getInitialState: function(){
+          return {
+               username: ''
+          }
+     },
+
+     onUpdateUser: function(e){
+          this.setState({
+               username: e.target.value
+          })
+     },
+
+     handleSubmitUser: function(e){
+          e.preventDefault();
+          var username = this.state.username;
+          this.setState({
+               username: ''
+          });
+          if(this.props.routeParams.playerOne){
+               console.log(this.context);
+               this.context.router.push({
+                    pathanme: '/battle',
+                    query: {
+                         playerOne: this.props.routeParams.playerOne,
+                         playerTwo: this.state.username
+                    }
+               });
+          }else{
+               console.log(this.context);
+               this.context.router.push('/playerTwo/' + this.state.username);
+          }
+
+     },
+
      render: function(){;
           return (
-          <div className="jumbotron col-sm-8 col-sm-offset-2 text-center" style={transparentBg}>
-               <h1>{this.props.route.header}</h1>
-               <div className="col-sm-12">
-                    <form>
-                         <div className="form-group">
-                              <input
-                               className="form-control"
-                               placeholder="GitHub username"
-                               type="text" />
-                         </div>
-                         <div className="form-group col-sm-4 col-sm-offset-4">
-                              <button
-                               className="btn btn-block btn-success"
-                               type="submit" > Continue
-                               </button>
-                         </div>
-                    </form>
-               </div>
-          </div>
+               <Prompt
+                    onSubmitUser={this.handleSubmitUser}
+                    onUpdateUser={this.onUpdateUser}
+                    header={this.props.route.header}
+                    username={this.state.username}
+
+                    />
        )
      }
 });
 
 module.exports = PromptContainer;
+
+/*
+this.state == checks all of the values held in the getIntitalState object
+
+this.setState == updates a peice of the state object
+
+this.props.routeParams.<?> == checks to see if the route params in the routes is
+there
+
+query = this.route.params
+
+
+
+*/

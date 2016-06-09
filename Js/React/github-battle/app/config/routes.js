@@ -24,3 +24,8 @@ var routes = (
 );
 
 module.exports = routes;
+
+/*
+Whenever the app is loaded and not at p1 or p2 path then the index route will be
+activated
+*/
