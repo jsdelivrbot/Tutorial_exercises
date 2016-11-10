@@ -4,35 +4,45 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
   <title>Course Manager</title>
 </head>
 <body>
-  <div class="container">
-  <h1>Course Tracker</h1>
-  <h2>Track all online courses</h2>
-  <p>This app supports the following operations:</p>
 
-  <ul>
-    <li><a href="listCourses.html"><button type="button">
-      List all Courses
-    </button></a></li>
-    <li><a href="createCourse.html"><button type="button">
-      Add a new course
-    </button></a></li>
-    <li><a href="updateCourse.html"><button type="button">
-      Update a course
-    </button></a></li>
-    <li><a href="deleteCourse.html"><button type="button">
-      Delete a course
-    </button></a></li>
-    <li><button type="button">
-      Clear database
-    </button></li>
-    <li><button type="button">
-      Create test data
-    </button></li>
-  </ul>
+  <header>
+    <nav>
+      <div class="container">
+        <ul>
+          <li><a href="#">Course Tracker</a></li>
+          <li><a href="listCourses.html">List Courses</a></li>
+          <li><a href="staticPages/createCourse.html">Create Course</a></li>
+          <li><a href="updateCourse.html">Update Course</a></li>
+          <li><a href="deleteCourse.html">Delete Course</a></li>
+          <li role="presentation" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+            aria-haspopup="true" aria-expanded="false">
+            Database <span class="caret"></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Clear database</a></l1>
+              <li><a href="#">Call database</a></li>
+            </ul>
+        </ul>
+      </div>
+    </nav>
+  </header>
 
-</div>
+  <main>
+    <div class="container">
+      <h1>Course Tracker</h1>
+      <h2>Track all online courses</h2>
+      <p>This app supports the following operations:</p>
+    </div>
+
+  </main>
+
+  <footer>
+
+  </footer>
+<script src="JS/dropdown.js"></script>
 </body>
 </html>

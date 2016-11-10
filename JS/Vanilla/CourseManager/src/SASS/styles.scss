@@ -1,0 +1,37 @@
+/* =====================
+   CSS Styles
+  ====================
+
+  [+ Menu]
+
+  #Global imports
+  #Header styling
+
+  */
+
+@import "components/globals";
+
+a,p,span {
+  color: $theme_dark_pink;
+}
+
+/* HEADER STYLING */
+header{
+  nav {border-bottom: 1px solid $theme_dark_pink; margin-top: 1rem;}
+  ul{
+    display: flex;
+    list-style: none;
+    li{
+      &:first-child {margin-right: auto}
+      a {display: inline-block; padding: 2rem; transition: all .7s ease}
+      margin-right: 1rem;
+      &:hover{
+        background: $theme_be;
+        a {text-decoration: none; color: white;}
+      }
+      &.nav-active{
+        font-size: 1.25em;
+      }
+    }
+  }
+}

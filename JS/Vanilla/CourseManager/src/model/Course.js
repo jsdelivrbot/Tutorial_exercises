@@ -38,8 +38,8 @@ Course.loadCourses = function(){
       courses = {},
       result = {};
   try{
-    if(localStorage["books"]){
-      courseString = localStorage['books'];
+    if(localStorage["courses"]){
+      courseString = localStorage['courses'];
     }
   }
   catch(e){
@@ -80,9 +80,9 @@ Course.update = function(courseEntity){
 };
 
 /**
-* Delete course from
-* @param : Course row
-* @return : Course object
+* Delete course from storage
+* @param : Unique course code
+* @return : Boolean based on success
 */
 Course.destroy = function(code){
   if(Course.instances[code]){
@@ -91,5 +91,30 @@ Course.destroy = function(code){
   }
   else{
     return false;
+  }
+};
+
+/**
+* Save all courses held in the memory instance to local storage
+*/
+Course.saveAll = function(){
+  var courseString = "",
+      error = {
+        status: false
+      },
+      courseCount = Object.keys(Course.instances).length;
+  try{
+    courseString = JSON.stringify(Book.instances);
+    localStorage['courses'] = courseString;
+  }
+  catch(e){
+    error.message = "Could not save data to the local storage";
+    console.log("Error saving to DB - " + e);
+  }
+};
+
+Course.clearData = function(){
+  if(confirm("Are you sure you want to clear all data?")){
+    localStorage['courses'] = {};
   }
 };

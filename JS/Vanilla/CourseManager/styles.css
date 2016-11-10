@@ -1,0 +1,37 @@
+/* =====================
+   CSS Styles
+  ====================
+
+  [+ Menu]
+
+  #Global imports
+  #Header styling
+
+  */
+a, p, span {
+  color: #C37D92; }
+
+/* HEADER STYLING */
+header nav {
+  border-bottom: 1px solid #C37D92;
+  margin-top: 1rem; }
+header ul {
+  display: flex;
+  list-style: none; }
+  header ul li {
+    margin-right: 1rem; }
+    header ul li:first-child {
+      margin-right: auto; }
+    header ul li a {
+      display: inline-block;
+      padding: 2rem;
+      transition: all .7s ease; }
+    header ul li:hover {
+      background: #E0C1B3; }
+      header ul li:hover a {
+        text-decoration: none;
+        color: white; }
+    header ul li.nav-active {
+      font-size: 1.25em; }
+
+/*# sourceMappingURL=styles.css.map */
