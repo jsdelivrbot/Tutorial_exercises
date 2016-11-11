@@ -7,7 +7,7 @@ function Course(details){
   this.courseName = details.name;
   this.language = details.language;
   this.duration = details.duration;
-  this.timestamp = genTimestamp();
+  //this.timestamp = genTimestamp();
 }
 
 Course.instances = {};
@@ -24,11 +24,12 @@ Course.prototype.genTimestamp = function(){
 Course.add = function(details){
   var course = new Course(details);
   Course.instances[details.code] = course;
+  console.log(Course.instances);
   return true;
 };
 
 /**
-* Retrieve all books held in current instance.
+* Retrieve all books held local storage and hold in Course instance object.
 * @effect : Populate Course instances object
 */
 Course.loadCourses = function(){

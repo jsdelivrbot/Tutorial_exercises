@@ -6,6 +6,7 @@
 
   #Global imports
   #Header styling
+  #Form styling
 
   */
 a, p, span {
@@ -33,5 +34,7 @@ header ul {
         color: white; }
     header ul li.nav-active {
       font-size: 1.25em; }
+
+/* FORM STYLING */
 
 /*# sourceMappingURL=styles.css.map */
