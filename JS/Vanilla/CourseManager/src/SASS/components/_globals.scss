@@ -1,3 +1,25 @@
+/* GLOBALS
+===========
+
+  #Theme Colors
+  #Theme mixins
+
+*/
+
+/* #Theme Colors
+--------------- */
+
 $theme_dark_pink: #C37D92;
 $theme_light_pink: #D89A9E;
 $theme_be: #E0C1B3;
+
+/* Theme Mixins
+-----------------*/
+
+/* Create a skewed div */
+@mixin skewDiv($angle,$height,$color){
+  transform: skewX($angle);
+  height: $height;
+  position: relative;
+  background: $color;
+}

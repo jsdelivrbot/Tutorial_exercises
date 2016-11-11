@@ -1,0 +1,77 @@
+#indexBanner{
+  /*
+  width: 100%;
+  height: 600px;
+  */
+  width: 100%;
+  height: 30vh;
+  /* background-size: 70% auto;*/
+  background-size: contain;
+  background-color: $theme_be;
+  background-image: url(img/spiralCode.png);
+  background-repeat: no-repeat;
+  background-position: 10% -10%;
+  /* background-attachment: fixed; */
+  position: relative;
+  .bannerPicture{
+    display: none;
+  }
+}
+
+.cutaway > div{
+  margin: 0 auto;
+  img {
+    display: block;
+    width: 35%;
+   margin: 0 auto;
+  }
+}
+
+
+/* Tablet View */
+@media screen and (min-width: 800px){
+  #indexBanner{
+    height: 50vh;
+    background-position: 20% 20%;
+    .bannerPicture{
+      display: block;
+      width: 160px;
+      position: absolute;
+      bottom: -60px;
+      left: 5%;
+      background: #fff;
+      border: 1px solid #777;
+      border-radius: 1rem;
+      img{width: 100%; background-size: contain; padding: 2rem;}
+      h3 {padding: 0 2rem 2rem 2rem; margin: 0}
+      z-index: 100;
+    }
+  }
+  .cutaway{
+    background: $theme_light_pink;
+    opacity: .5;
+    height: 200px;
+    position: relative;
+    background: linear-gradient(-45deg, transparent 50%, $theme_light_pink 0);
+    div {
+      img {
+        width: 10%;
+        /* position: absolute;*/
+        left: 50%;
+      }
+    }
+  }
+  .cutaway2{
+    /*
+    overflow: hidden;
+    width: 50%;
+    left: 55%;
+    opacity: .5;
+    @include skewDiv(45deg,200px,$theme_be);
+    */
+    background: $theme_be;
+    background: linear-gradient(45deg, transparent 50%, $theme_be 0);
+    height: 200px;
+    opacity: .5;
+  }
+}
