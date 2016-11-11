@@ -3,9 +3,9 @@
 =====================*/
 
 function Course(details){
-  this.courseCode = details.code;
-  this.courseName = details.name;
-  this.language = details.language;
+  this.code = details.code;
+  this.name = details.name;
+  this.lang = details.lang;
   this.duration = details.duration;
   //this.timestamp = genTimestamp();
 }
@@ -47,13 +47,18 @@ Course.loadCourses = function(){
     result.error = "Could not read from the local storage";
     return;
   }
+  /*
+  *Retrieve string representation of courses and convert back into javascript
+  * course objects to be held in Course.instances object
+  */
   if(courseString){
     courses = JSON.parse(courseString);
     keys = Object.keys(courses);
     var i;
     for(i = 0; i < keys.length; i++){
       courseEntity = keys[i];
-      Course.instances[courseEntity] = Course.convertToObject(courses[key]);
+      console.log(courseEntity);
+      Course.instances[courseEntity] = Course.convertToObject(courses[courseEntity]);
     }
   }
 };
@@ -75,9 +80,12 @@ Course.convertToObject = function(row){
 */
 Course.update = function(courseEntity){
   var course = Course.instances[courseEntity.code];
-  if(courseEntity.name != course.name){
+  if(courseEntity.code){
     course.name = courseEntity.name;
+    course.lang = courseEntity.lang;
+    course.duration = courseEntity.duration;
   }
+  console.log(course);
 };
 
 /**
@@ -105,13 +113,14 @@ Course.saveAll = function(){
       },
       courseCount = Object.keys(Course.instances).length;
   try{
-    courseString = JSON.stringify(Book.instances);
+    courseString = JSON.stringify(Course.instances);
     localStorage['courses'] = courseString;
   }
   catch(e){
     error.message = "Could not save data to the local storage";
     console.log("Error saving to DB - " + e);
   }
+  alert("beforeunload set");
 };
 
 Course.clearData = function(){

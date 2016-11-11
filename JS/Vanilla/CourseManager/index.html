@@ -16,7 +16,7 @@
           <li><a href="#">Course Tracker</a></li>
           <li><a href="listCourses.html">List Courses</a></li>
           <li><a href="staticPages/createCourse.html">Create Course</a></li>
-          <li><a href="updateCourse.html">Update Course</a></li>
+          <li><a href="staticPages/updateCourse.html">Update Course</a></li>
           <li><a href="deleteCourse.html">Delete Course</a></li>
           <li role="presentation" class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
@@ -36,6 +36,7 @@
       <h1>Course Tracker</h1>
       <h2>Track all online courses</h2>
       <p>This app supports the following operations:</p>
+      <button id="clear">Clear DB</button>
     </div>
 
   </main>
@@ -43,6 +44,18 @@
   <footer>
 
   </footer>
+<script>
+  var btn = document.getElementById('clear');
+  clear.addEventListener("click", function(){
+    if(localStorage['courses']){
+      localStorage['courses'] = {};
+      console.log('Local Storage cleared');
+    }
+    else{
+      console.log('Local storage cleared');
+    }
+  });
+</script>
 <script src="JS/dropdown.js"></script>
 </body>
 </html>

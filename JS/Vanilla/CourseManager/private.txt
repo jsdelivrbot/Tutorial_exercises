@@ -1,1 +1,3 @@
 SASS Call --> 
+
+sass --watch src/SASS/styles.scss

@@ -14,6 +14,7 @@ courseLib.view.createCourse = {
     //Attach window and btn event handler
     saveBtn.addEventListener("click", courseLib.view.createCourse.handleSaveEvent);
     window.addEventListener("beforeunload", function(){
+      console.log('beforeunload attached to the window event');
       Course.saveAll();
     });
 
@@ -28,7 +29,7 @@ courseLib.view.createCourse = {
     var courseDetails = {
       code: form.code.value,
       name: form.c_name.value,
-      langauge: form.langauge.value,
+      lang: form.lang.value,
       duration: form.duration.value
     };
     Course.add(courseDetails);
