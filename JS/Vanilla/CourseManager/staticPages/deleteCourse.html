@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../styles.css">
+  <title>Course Manager</title>
+  <script src="../src/controller/app_init.js"></script>
+  <script src="../src/model/Course.js"></script>
+  <script src="../src/view/deleteCourse.js"></script>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div class="container">
+        <ul>
+          <li><a href="#">Course Tracker</a></li>
+          <li><a href="listCourses.html">List Courses</a></li>
+          <li><a href="staticPages/createCourse.html">Create Course</a></li>
+          <li><a href="staticPages/updateCourse.html">Update Course</a></li>
+          <li><a href="deleteCourse.html">Delete Course</a></li>
+          <li role="presentation" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+            aria-haspopup="true" aria-expanded="false">
+            Database <span class="caret"></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Clear database</a></l1>
+              <li><a href="#">Call database</a></li>
+            </ul>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1> Delete a course </h1>
+      <form id="delete_course">
+        <label> Select Course :
+          <select name="selectCourse"><option> -- Please choose --</option></select>
+        </label>
+        <button type="button" name="commit"> Delete </button>
+        <a href="../index.html"> Go back to main page </a>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+
+  </footer>
+
+<script>
+  window.addEventListener('load', courseLib.view.deleteCourse.setupInterface());
+</script>
+</body>
+</html>
