@@ -18,7 +18,7 @@ courseLib.view.listCourses = {
       row = tableBody.insertRow();
       row.insertCell(-1).textContent = Course.instances[key].name;
       row.insertCell(-1).textContent = Course.instances[key].code;
-      row.insertCell(-1).textContent = Course.instances[key].langauge;
+      row.insertCell(-1).textContent = Course.instances[key].lang;
       row.insertCell(-1).textContent = Course.instances[key].duration;
     }
   }

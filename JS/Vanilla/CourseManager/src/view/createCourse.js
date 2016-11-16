@@ -11,6 +11,9 @@ courseLib.view.createCourse = {
     //Load courses from local storage
     Course.loadCourses();
 
+    //Generate course time stamp
+    courseLib.view.createCourse.generateTimeStamp();
+
     //Attach window and btn event handler
     saveBtn.addEventListener("click", courseLib.view.createCourse.handleSaveEvent);
     window.addEventListener("beforeunload", function(){
@@ -34,6 +37,16 @@ courseLib.view.createCourse = {
     };
     Course.add(courseDetails);
     form.reset();
+  },
+
+  /*
+  * Set the timestamp for course creation
+  */
+  generateTimeStamp: function(){
+    var timeEl = document.getElementById("time");
+    var today = new Date();
+    timeEl.textContent = today.toLocaleString();
+    timeEl.setAttribute("datetime", today.toISOString());
   }
 
 };

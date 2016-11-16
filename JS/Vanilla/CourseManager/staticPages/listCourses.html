@@ -8,7 +8,7 @@
   <!-- Link application logic -->
   <script src="../src/controller/app_init.js"></script>
   <script src="../src/model/Course.js"></script>
-  <script src="../src/view/listCourse.js"></script>
+  <script src="../src/view/listCourses.js"></script>
   <title>Course List</title>
 </head>
 <body>
@@ -17,17 +17,21 @@
   </header>
 
   <main>
-    <h1> Courses currently taking </h1>
-    <table id="courses">
-      <thead>
-        <tr><th>Course Name</th></tr>
-        <tr><th>Course Code</th></tr>
-        <tr><th>Langauge</th></tr>
-        <tr><th>Duration</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <a href="../index.html"> Back to main page </a>
+    <div class="container">
+      <h1> Courses currently taking </h1>
+      <table id="courses" class="table">
+        <thead>
+          <tr>
+            <th>Course Name</th>
+            <th>Course Code</th>
+            <th>Langauge</th>
+            <th>Duration</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <a href="../index.html"> Back to main page </a>
+  </div>
   </main>
 
   <footer>
