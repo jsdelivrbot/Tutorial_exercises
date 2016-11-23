@@ -3,22 +3,19 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import YTsearch from 'youtube-api-search';
+import _ from 'lodash';
 
 /* Application components
 ========================*/
 import TestComponent from '../components/TestComponent';
 import SearchBar from '../components/SearchBar';
 import VideoList from '../components/VideoList';
+import VideoDetail from '../components/VideoDetail';
 
 /* Private config
 ================*/
 import config from '../../../private/config';
 
-/* API Imports
-=============*/
-YTsearch({key: config.yt_key, term: 'antarctica'}, (data) => {
-  console.log(data);
-});
 
 /* Class
 =======*/
@@ -28,19 +25,25 @@ class Main extends Component {
   constructor(props){
     super(props);
     this.state = {
-      returnedVideos: []
+      returnedVideos: [],
+      selectedVideo: null
     };
-    this.renderDefaultVideos();
+    this.renderVideos('JavaScript');
   }
 
-  renderDefaultVideos(){
-    YTsearch({key: config.yt_key, term: 'JavaScript'}, (tubeClips) => {
+  renderVideos(subject){
+    YTsearch({key: config.yt_key, term: subject}, (tubeClips) => {
       this.setState({
-        returnedVideos: tubeClips
+        returnedVideos: tubeClips,
+        selectedVideo: tubeClips[0]
       });
     });
   }
 
+  /**
+  * @return Main application dependent on whether YT request for videos
+  *         successful. If not, page null.
+  */
   render(){
 
     if( !this.state.returnedVideos.length > 1 ){
@@ -51,11 +54,23 @@ class Main extends Component {
       );
     }
     else {
+
+      //Throttle video update via search bar with lodash debounce
+      const searchDelay = _.debounce((subject) => {
+        this.renderVideos(subject)
+      },300);
+
       return(
         <div className="main-container">
-          <SearchBar />
+          <SearchBar passToMainComponent={searchDelay}/>
+          <VideoDetail
+            video={this.state.selectedVideo}
+            />
           <VideoList
             videos={this.state.returnedVideos}
+            passSelectedVideoToMain={vidSelected => {this.setState({
+              selectedVideo: vidSelected
+            })}}
           />
         </div>
       );
@@ -63,6 +78,5 @@ class Main extends Component {
   }
 
 }
-
 
 export default Main;

@@ -8,33 +8,24 @@ class SearchBar extends Component {
   constructor(props){
     super(props);
     this.state = {
-      searchValue: 'null',
-      secValue: 'sec',
-      correct: ''
+      searchValue: ''
     };
   }
 
   /**
   * @param -> this explicitly passed via bind in attached handler below
   */
-  onChange(e){
-    this.setState({
-      searchValue: e.target.value
-    });
+  onChange(inputValue){
+    this.setState({searchValue: inputValue});
+    this.props.passToMainComponent(inputValue);
   }
 
   render(){
     return(
-      <div>
-        <h5>{this.state.searchValue}</h5>
-        <h6>{this.state.secValue}</h6>
-        <input onChange={e => this.setState({secValue: e.target.value})} />
-        <input onChange={this.onChange.bind(this)}/>
-        <input
-          value={this.state.correct}
-          onChange={e => this.setState({correct: e.target.value})}
-          />
-      </div>
+      <input
+        value={this.state.value}
+        onChange={e => this.onChange(e.target.value)}
+        />
     )
 
   }
@@ -42,3 +33,16 @@ class SearchBar extends Component {
 }
 
 export default SearchBar;
+
+
+
+/*
+<h5>{this.state.searchValue}</h5>
+<h6>{this.state.secValue}</h6>
+<input onChange={e => this.setState({secValue: e.target.value})} />
+<input onChange={this.onChange.bind(this)}/>
+<input
+  value={this.state.correct}
+  onChange={e => this.setState({correct: e.target.value})}
+  />
+  */

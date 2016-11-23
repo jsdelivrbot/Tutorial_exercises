@@ -1,7 +1,10 @@
 import React from 'react';
 
-const VideoListItem = ({video}) => {
+const VideoListItem = ({video, onSelectedVideo}) => {
 
+  /**
+  * @return <li> for media thumbnail including thumb image and title
+  */
   return(
     <li>
       <div className="list-group-item">
@@ -10,7 +13,8 @@ const VideoListItem = ({video}) => {
         </div>
         <div className="media-body">
           <div className="media-heading">{video.snippet.title}</div>
-          <button className="btn btn-default">View</button>
+          <button onClick={()=> onSelectedVideo(video)}
+            className="btn btn-default">View video</button>
         </div>
       </div>
     </li>

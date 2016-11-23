@@ -9,10 +9,15 @@ const VideoList = (props) => {
       <VideoListItem
         video={video}
         key={video.etag}
+        onSelectedVideo={props.passSelectedVideoToMain}
         />
     );
   });
 
+  /**
+  * @return <ul> list containing mapped <VideoListItem> for each video object
+  *         held in props.
+  */
   return(
     <div className="videoList">
       <ul className="col-md-3 list-group">
