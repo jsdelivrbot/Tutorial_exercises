@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <title>SVG</title>
+</head>
+<body>
+
+  <main class="container">
+
+    <!-- Section 1 - Expermineting with SVG's-->
+    <section id="section-1">
+      <svg width="720" height="120">
+        <circle cx="40" cy="20" r="10"></circle>
+        <circle cx="80" cy="40" r="15"></circle>
+        <circle cx="120" cy="60" r="20"></circle>
+      </svg>
+      <svg width="720" height="120">
+        <circle cx="40" cy="20" r="10" style="fill:red"></circle>
+        <circle cx="80" cy="40" r="15" style="fill:green"></circle>
+        <circle cx="120" cy="60" r="20" style="fill:blue"></circle>
+      </svg>
+    </section>
+
+    <!-- Section 2 - Various SVG elements-->
+    <section id="section-2">
+      <svg width="720" height="120">
+        <ellipse cx="50" cy="30" rx="40" ry="20" />
+        <rect x="10" y="10" width="150" height="100"></rect>
+      </svg>
+    </section>
+
+    <!-- Lines
+         x1, y1 = starting position
+         x2, y2 = ending position
+    -->
+    <section id="lines">
+      <svg width="720" height="120">
+        <line x1="10" y1="10" x2="100" y2="100" stroke="black"/>
+        <line x1="101" y1="101" x2="25" y2="25" stroke="black"/>
+      </svg>
+    </section>
+
+    <section id="paths">
+      <svg width="720" height="120">
+        <path d="M 10 10 L 310 20 L 160 110 Z">
+      </svg>
+    </section>
+
+    <section id="text">
+      <svg width="720" height="120">
+        <text x="350" y="65" fill="Red" font-family="arial" font-size="16">
+          SVG text
+        </text>
+      </svg>
+    </section>
+
+    <!-- Section 3 - SVG transforms -->
+
+    <!-- Rotate -->>
+    <section id="rotate-lines">
+      <line x1="0" y1="150" x2="0" y2="0" stroke="black" />
+      <line x1="0" y1="0" x2="150" y2="0" stroke="black" />
+      <rect x="0" y="0 " width="100" height="100" fill="red" transform="rotate(45)"/>
+    </section>
+
+  </main>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="d3svg.js"></script>
+</body>
+</html>

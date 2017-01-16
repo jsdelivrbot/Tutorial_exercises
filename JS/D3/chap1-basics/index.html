@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <title>Basics</title>
+</head>
+<body>
+
+  <main class="container">
+
+    <!-- section 1 - using selectors -->
+    <section id="section-1">
+      <h1> Using selectors </h1>
+      <div id="div1">A</div>
+      <div id="div2">B</div>
+      <div id="div3">C</div>
+      <div id="div4">D</div>
+    </section>
+
+    <!-- Section 2 - data binding -->
+    <section id="section-2">
+      <h1> Data binding </h1>
+      <div id="div4">A</div>
+      <div id="div5">B</div>
+      <div id="div6">C</div>
+      <div id="div7">D</div>
+    </section>
+
+    <!-- dynamic rendering to dom -->
+    <section id="no-divs">
+      <h1> Appending newly created divs with dynamic datums </h1>
+    </section>
+
+    <section id="render-button">
+      <h1> Dynamic rendering with on click </h1>
+      <button onclick="render([5,10])">Render values</button>
+    </section>
+
+
+  </main>
+
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="d3101.js"></script>
+</body>
+</html>
