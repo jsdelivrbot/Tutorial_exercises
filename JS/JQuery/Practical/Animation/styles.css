@@ -1,0 +1,46 @@
+main{
+  margin-top: 50px;
+}
+
+/*  SECTION 1
+============*/
+#block-move{
+  position: relative;;
+  top: 0;
+  left: 0;
+}
+
+/*  SECTION 2
+============*/
+#fade-out{
+  position: relative;
+  top: 0px;
+  left: 0px;
+  height: 200px;
+  width: 200px;
+  background: powderblue;
+  text-align: center;
+}
+
+/*  SECTION 3
+============*/
+#fade-in{
+  position: relative;
+  height: 200px;
+  width: 200px;
+  background: #D49A6A;
+  text-align: center;
+  border: 1px solid black;
+  display: none;
+  z-index: -1;
+}
+
+/*  SECTION 4
+============*/
+#slider{
+  height: 200px;
+  width: 200px;
+  background: steelblue;
+  text-align: center;
+  border: 1px solid black;
+}

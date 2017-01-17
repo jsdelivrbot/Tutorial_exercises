@@ -1,0 +1,37 @@
+html, body{
+  background: black;
+}
+
+#inner-cont{
+  margin: 100px auto;
+  width: 500px;
+  height: 434px;
+  padding-bottom: 5rem;
+  background: #CF7D39;
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+}
+
+button{
+  background: orange;
+  border: 0;
+  padding: 1.5rem;
+}
+
+.hidden {
+visibility: hidden;
+}
+
+
+.shown {
+display: block;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  background: #CF7D39;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}

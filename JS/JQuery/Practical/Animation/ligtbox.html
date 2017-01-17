@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="lightboxStyles.css">
+  <title>Lightbox example</title>
+</head>
+<body>
+
+  <!-- Main HTML body -->
+  <main>
+
+    <!-- Lightbox -->
+    <section class="overlay">
+      <div id="inner-cont" class="image-height">
+        <div class="image-container">
+          <div class="controls">
+            <button> > </button>
+            <button> < </button>
+          </div>
+        <img src="images/bhaw.jpg" class="shown"/>
+        <img src="images/pro.jpg" class="hidden"/>
+        <img src="images/zerospa.jpg" class="hidden"/>
+      </div>
+     </div>
+    </section>
+
+  </main>
+
+<!-- Lightbox JS -->
+<script>
+
+  var next = $('button:nth-of-type(1)');
+  var prev = $('button:nth-of-type(2)');
+
+  /**
+  * @class - Configure base LightBox class
+  */
+  function LightBox(){
+    this.imageContainer = $('div.image-container');
+  }
+
+  /**
+  * @method - Retrieve next/prev element and return
+  */
+  LightBox.prototype.getElement = function(currentElement, targetParent, type){
+    var nextElement;
+    if(type === 'next')
+    {
+      nextElement = currentElement.next();
+      if( !nextElement.attr('src') ){
+        return targetParent.first();
+      };
+    }
+    else
+    {
+      nextElement = currentElement.prev();
+      if( !nextElement.attr('src') ){
+        return targetParent.last();
+      }
+    }
+    return nextElement;
+  }
+
+  /**
+  * @object - Fade in new picture
+  */
+  LightBox.prototype.go = function(where){
+
+    var imageElement = this.imageContainer.children('img');
+    var currentElement = imageElement.filter('.shown');
+    var nextElement = this.getElement(currentElement, imageElement, where);
+
+    currentElement.fadeOut('slow', function(){
+      currentElement.removeClass('shown').addClass('hidden');
+      nextElement.fadeIn('slow', function(){
+        nextElement.removeClass('hidden').addClass('shown');
+      });
+    });
+  }
+
+  //Declare lightbox --
+  var controller = new LightBox();
+  next.click(function(){
+    controller.go('next');
+  });
+  prev.click(function(){
+    controller.go('back');
+  });
+
+</script>
+</body>
+</html>

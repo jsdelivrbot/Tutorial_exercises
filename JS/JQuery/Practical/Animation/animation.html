@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <title>Animations</title>
+</head>
+<body>
+
+  <main class="container">
+
+    <!-- SECTION 1 -->
+    <section id="base-anim" class="clearfix col-sm-8 col-sm-offset-2">
+      <h3> Basic header animation </h3>
+      <div id="block-move"> Moving block </div>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section id="base-fade" class="clearfix col-sm-8 col-sm-offset-2">
+      <h3> Basic fade out </h3>
+      <div id="fade-out">
+        Another example of fade
+      </div>
+    </section>
+
+    <!-- SECTION 3 -->
+    <section id="base-in" class="clearfix col-sm-8 col-sm-offset-2">
+      <h3> Basic fade in </h3>
+      <div id="fade-in"></div>
+      <span id="to-display"> Display box </span>
+    </section>
+
+    <!-- SECTION 4 -->
+    <section id="base-slide-in" class="clearfix col-sm-8 col-sm-offset-2">
+      <h3> Basic slide in </h3>
+      <div id="slider"> A slide </div>
+    </section>
+
+
+  </main>
+
+<script>
+
+  $(document).ready(function(){
+
+    //Basic animation and CB
+    $('#block-move').animate({
+      'left': 1000,
+      'top': 500
+    }, 4000, 'swing', function(){
+      $(this).animate({
+        'left': 0,
+        'top': 0
+      }, 4000, 'linear')
+    });
+
+    //Basic fade and append
+    $('#fade-out').on('click', function(){
+      $(this).fadeOut(3000, function(){
+        var span = document.createElement('span');
+        span.innerHTML ='And then it was faded';
+        $('#base-fade').append(span);
+      });
+    });
+
+    //Basic fade to show - #D49A6A
+    var fadein = $('#fade-in');
+    var span = $('#to-display');
+    span.on('click', function(){
+      $(this).fadeOut();
+      fadein.fadeIn(4000);
+    })
+
+    //Basic slide in for child element
+    $('#base-slide-in').click(function(){
+      $(this).find('#slider').slideToggle('slow');
+    });
+
+
+
+
+  });//end of doc ready
+
+
+
+</script>
+</body>
+</html>
