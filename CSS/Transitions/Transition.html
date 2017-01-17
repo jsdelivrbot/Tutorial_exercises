@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <title>CSS Transitions</title>
+  <style>
+
+  /*BUTTON
+  =======*/
+  section#button-example{
+    text-align: center;
+    margin: 3rem 0;
+  }
+
+  button{
+    padding:2rem;
+    background: magenta;
+    transition: background 500ms ease-in;
+  }
+  button:hover{
+    background: yellow;
+    transition: background 200ms ease-out 50ms;
+  }
+
+  /*NAVIGATION
+  ==========*/
+
+  /* Remove list styling from ul , li */
+  ul, li {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    background-color: blue;
+    color: white;
+    border: 1px solid black;
+  }
+
+  /* Pad inner ul li's*/
+  nav ul li {
+    padding: 3px 5px;
+  }
+
+  /* Change main li's to inline block */
+  nav > ul > li {
+    position: relative;
+    min-width: 120px;
+    display: inline-block;
+    border-width: 0 1px 0 0;
+  }
+
+  /* Set inner ul's out of document flow */
+  nav ul ul {
+    position: absolute;
+    top: 100%;
+  }
+
+  /* scale ul out of view and add trans props */
+  nav li ul {
+    transition-property: transform;
+    transition-duration: 300ms;
+    transition-timing-function: ease-in;
+    transition-delay: 50ms;
+    transform: scale(1,0); /* <-- Here is where top-hiding occurs */
+    transform-origin: top center;
+  }
+  /* scale inner ul's back to full size */
+  nav li:hover ul {
+    transform: scale(1,1);
+  }
+  
+  </style>
+</head>
+<body>
+
+  <main class="container">
+
+    <section id="button-example">
+      <button> Return to test </button>
+    </section>
+
+    <!-- Drop down menu transistion -->
+    <section id="navigation" class="col-sm-8 col-sm-offset-2">
+      <nav>
+        <ul>
+          <li> Further info
+            <ul>
+              <li> Source </li>
+              <li> Test code </li>
+              <li> Email </li>
+            </ul>
+          </li>
+          <li> Nothing </li>
+          <li> Team
+            <ul>
+              <li> Santa Claus </li>
+              <li> Elves </li>
+              <li> Rudolph </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </section>
+
+  </main>
+
+
+
+</body>
+</html>
