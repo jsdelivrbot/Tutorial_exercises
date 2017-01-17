@@ -6,12 +6,13 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <title>CSS Transitions</title>
   <style>
+  p{ margin-top: 20px;}
 
   /*BUTTON
   =======*/
-  section#button-example{
+  section{
     text-align: center;
-    margin: 3rem 0;
+    margin: 3rem auto;
   }
 
   button{
@@ -61,7 +62,7 @@
     transition-property: transform;
     transition-duration: 300ms;
     transition-timing-function: ease-in;
-    transition-delay: 50ms;
+    transition-delay: 150ms;
     transform: scale(1,0); /* <-- Here is where top-hiding occurs */
     transform-origin: top center;
   }
@@ -69,19 +70,115 @@
   nav li:hover ul {
     transform: scale(1,1);
   }
-  
+
+  /* HOVER
+  =======*/
+
+  /* Set base values for div */
+  .to-be{
+    margin: 0 auto;
+    color: #ff0000;
+    border: 1px solid #00ff00;
+    border-radius: 0;
+    transform: scale(1) roate(0deg);
+    opacity: 1;
+    box-shadow: 3px 3px rgba(0,0,0,0.1);
+    width: 50%;
+    padding: 100px;
+    /* Select all properties to transisition */
+    transition-property: color, border, border-radius, transform, opacity, box-shadow, width, padding;
+    transition-duration: 2s;
+  }
+
+  .to-be:hover{
+    color: #000000;
+    border: 5px dashed #000000;
+    border-radius: 50%;
+    transform : scale(2) rotate(-10deg);
+    opacity: 0.5;
+    box-shadow: -3px -3px rgba(255, 0, 0, 0.5);
+    width: 100px;
+    padding: 20px;
+  }
+
+  /* PORTFOLIO BOX
+  ===============*/
+
+
+  .portfolio-box{
+    opacity: 0.6;
+    background: green;
+    margin: 0 auto;
+    border-radius: 0;
+    width: 50%;
+    padding: 100px;
+    border: 1px solid #AA6C39;
+    position: relative;
+    transform: scale(1) rotate(0deg);
+    /* Transition settings */
+    transition-property: background, border, transform, border-radius, opacity;
+    transition-duration: 1s;
+    transition-timing-function: ease-in;
+    transition-delay: 230ms, 100ms, 500ms, 200ms, 50ms;
+  }
+
+  .portfolio-box:hover{
+    background: white;
+    border-radius: 20%;
+    border: 2px dashed green;
+    transform: scale(0.5) rotate(-90deg);
+    opacity: 1;
+  }
+
+
+  /* INPUT CHANGE
+  =============*/
+  input{
+    padding: 2rem;
+    color: white;
+  }
+
+  input:valid{
+    transition-duration: 1s;
+    background: green;
+  }
+
+  input:invalid{
+    transition-duration: .5s;
+    background: red;
+  }
+
+
   </style>
 </head>
 <body>
 
   <main class="container">
 
+    <section id="tips" style="text-align: left">
+      <h3><u>Rules of the game</u></h3>
+      <p><b>Transition Property : </b> List of properties (or all) that you want to
+      transition [i.e, color, border, border-radius, width, opacity..]</p>
+      <code>  transition-property: all;  -  transition-property: color, border, width; </code>
+      <p><b>Transition Duration : </b> Length of time that the indicated values should take
+      to transition</p>
+      <code>transition-duration: 1s;  -  transition-duration: 1s, 2s, 3s;</code>
+      <p><b>Tranistion Timing</b> Determines the style of transition</p>
+      <code> transition-timing-function: ease-in-out; </code>
+      <p><b>Transition Delay : </b> </p>
+      <p><b>Transitionable properties :</b> Anything with numeric val</p>
+
+      <hr>
+    </section>
+
     <section id="button-example">
+      <h3> Base button </h3>
       <button> Return to test </button>
     </section>
 
     <!-- Drop down menu transistion -->
     <section id="navigation" class="col-sm-8 col-sm-offset-2">
+      <h3> Animated dropdown navigation </h3>
       <nav>
         <ul>
           <li> Further info
@@ -101,6 +198,25 @@
           </li>
         </ul>
       </nav>
+    </section>
+
+    <!-- Base trnaistions -->
+    <section id="hover" class="col-sm-8 col-sm-offset-2">
+      <h3> Quick animation </h3>
+      <div class="to-be">
+
+      </div>
+    </section>
+
+    <!-- DIV over check -->
+    <section id="orange" class="col-sm-8 col-sm-offset-2">
+      <h3> Portfolio box </h3>
+      <div class="portfolio-box"></div>
+    </section>
+
+    <!-- -->
+    <section id="input-change">
+      <input type="text" placeholder="Enter name" required />
     </section>
 
   </main>
