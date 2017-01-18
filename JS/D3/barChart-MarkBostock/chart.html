@@ -12,6 +12,16 @@
   body{ background: slategray; box-sizing: border-box;}
   section{ width: 80%; margin: 0 auto;}
 
+  .chart{
+    padding: 2rem;
+    margin: 0 auto;
+    background: white;
+    border: 2px solid black;
+    margin-top: 3rem;
+  }
+
+  .center { text-align: center; }
+
   /* Section 1 - Harcoded chart
   ===========================*/
 
@@ -65,9 +75,22 @@
     <h1> Harcoded Chart </h1>
   </section>
 
+  <!-- Section 2 - Hardcoded SVG chart -->
   <section class="svg-chart">
-    <h1> SVG chart </h1>
+    <h1 class="center"> SVG chart </h1>
     <svg class="svg-holder"></svg>
+  </section>
+
+  <!-- Section 3 - Remote data SVG chart -->
+  <section class="remote-svg-chart chart">
+    <h1 class="center"> Remote SVG chart </h1>
+    <svg class="remote-svg"></svg>
+  </section>
+
+  <!-- Section 4 - Remote data SVG chart w/ axis labels -->
+  <section class="remote-axis-chart" style="text-align: center;">
+    <h1 class="center"> Remote Chart with axis labels </h1>
+    <svg class="chart-axis chart"></svg>
   </section>
 
 <script>
@@ -102,7 +125,7 @@
   //Config range from data values
   var svgX = d3.scale.linear()
                .domain([0, d3.max(hardcodedData)])
-               .range([0, graphWidth]);
+               .range([0, graphWidth]); //width as bar chart sideways
 
   //Set SVG holder width and and size based on base width * length
   var chart = d3.select('.svg-holder')
@@ -128,6 +151,98 @@
      .attr("y", barHeight / 2)
      .attr("dy", ".35em")
      .text(function(d) { return d; });
+
+
+ /* SECTION 3 - GENERATED FROM CSV FILE
+ ======================================*/
+/*
+ var width = 420, barHeight = 20;
+
+ var remoteX = d3.scale.linear()
+                 .range([0, width]);
+
+ var chart = d3.select('.remote-svg')
+               .attr('width', width);
+
+ //Load data from source
+ d3.csv('data/scores.csv', type , function(err,data){
+   if(err){ return alert(err);}
+   remoteX.domain([0, d3.max(data, function(d){ return d.score })]);
+
+   chart.attr('height', barHeight * data.length);
+
+   var bar = chart.selectAll('g')
+                  .data(data)
+                  .enter()
+                  .append('g') //<-- Begin cycle through - Each iteration start here
+                  .attr('transform', function(d,i){
+                    return 'translate(0,' + i * barHeight + ')';
+                  });
+
+  bar.append('rect')
+     .attr('width', function(d){ return remoteX(d.score); })
+     .attr('height', barHeight -1 )
+     .style('fill', function(d,i){ return i % 2 === 0 ? 'lightblue' : 'slategray' });
+
+  bar.append('text')
+     .attr('x', function(d){ return remoteX(d.score) - 3 })
+     .attr('y', barHeight / 2)
+     .attr('dy', '.35em')
+     .style('font', '10px sans-serif')
+     .style('text-anchor', 'end')
+     .style('fill', 'white')
+     .text(function(d){ return d.score; });
+
+ });//end of CSV */
+
+function type(d){
+  d.score = +d.score; //coerce to number
+  return d;
+}
+
+/* SECTION 4 - REMOTE DATA WITH AXIS
+==================================*/
+
+var width = 960, height = 500;
+
+var y = d3.scale.linear()
+          .range([height ,0]); //Changes the 0 value from the top to the bottom so swe can run the bars from the bottom
+
+var chart = d3.select('.chart-axis')
+              .attr('width', width)
+              .attr('height', height);
+
+d3.csv('/data/scores.csv', type, function(err,data){
+  if(err){alert(err);}
+  y.domain([0, d3.max(data, function(d){ return d.score })]);
+
+  var barWidth = ( width / data.length );
+
+  var bar = chart.selectAll('g')
+                .data(data)
+                .enter().append('g')
+                .attr('transform', function(d,i){ return 'translate(' + i * barWidth + ',0)'; });
+
+  bar.append('rect')
+      .attr('y', function(d){ return y(d.score); })
+      .attr('height', function(d){ return height - y(d.score); })
+      .attr('width', barWidth - 1)
+      .attr('fill', function(d,i){
+        return i % 2 === 0 ? 'lightblue' : 'slategray';
+      });
+
+  bar.append('text')
+     .attr('x', barWidth / 2)
+     .attr('y', function(d){ return y(d.score) + 3 })
+     .attr('dy', '.75em')
+     .style('font', '20px sans-serif')
+     .style('text-anchor', 'end')
+     .style('fill', 'white')
+     .text(function(d){ return d.score; });
+
+
+});//end of CSV call
+
 
 
 
