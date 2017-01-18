@@ -19,9 +19,8 @@ button{
 }
 
 .hidden {
-visibility: hidden;
+display: none;
 }
-
 
 .shown {
 display: block;

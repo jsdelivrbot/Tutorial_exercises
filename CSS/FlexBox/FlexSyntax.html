@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Remember to set the langauge and direction as flex selects how it arranges
+       its axes based on writing mode
+  -->
+  <html lang="en" dir="ltr">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Flex items</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<style>
+
+  /* FLEX SECTION 1
+  ================*/
+
+  body{ background: slategrey; width: 80%; margin: 0 auto; }
+  img{ width: 50%; }
+  button { width: 50%; }
+  section { margin-top: 5rem;}
+  section:last-child{ margin-bottom: 5rem;}
+
+  /* Dsiplay articles horizontally along screen */
+  #library{
+    position: relative;
+    display: flex;
+    flex-flow: row-wrap;
+  }
+
+  /* Display inner items horizontally */
+  .library-item{
+    display: flex;
+    flex-flow: column;
+    padding: 3rem;
+    text-align: center;
+    border: 1px solid white;
+    margin: 2rem;
+  }
+
+  /* Place image at top and center */
+  .library-item > img {
+    order: -1;
+    align-self: center;
+    margin-top: 2rem;
+  }
+
+  /* Center button  */
+  .library-item > button {
+    margin-top: auto;
+    color: white;
+    background: slategrey;
+    border: 0;
+    border: 1px solid white;
+  }
+
+  /* FLEX SECTION 2
+  ================*/
+
+  .layout article,
+  .layout aside{
+    border: 1px solid black;
+    width: 300px;
+    height: 300px;
+  }
+
+  /* Declare parent as flex container */
+  .layout{
+    display: flex;
+    flex: row nowrap;
+  }
+
+  /* Change order of elements */
+  aside.lh-content{
+    order: -1;
+  }
+  aside.rh-content{
+    order: 2;
+  }
+
+  /* Flex 2 to 1 size on the main content */
+  .layout article{
+    flex: 2 1 auto;
+  }
+
+  .layout > aside {
+    flex: auto;
+  }
+
+  /* FLEX SECTION 3
+  ===============*/
+  nav{ background: black; padding: 2rem; }
+  nav > ul > li {
+    list-style: none;
+    margin-right: 3rem;
+    padding: 1rem;
+    border-radius: 2rem;
+  }
+
+  /* Set container as flex */
+  nav > ul {
+    display: flex;
+  }
+
+  /* Align login to let with auto */
+  nav > ul #logon{
+    margin-left: auto;
+  }
+
+
+</style>
+<body>
+
+  <!-- Section 1 -->
+  <section id="library">
+
+    <article class="library-item">
+      <h1>BiPolar (East London)</h1>
+      <h2>by Zcarikoa</h2>
+      <img src="images/bipolar.jpg" alt="Grafitti cover at East London" />
+      <button>Remove from library</button>
+    </article>
+
+    <article class="library-item">
+      <h1>Gallatik</h1>
+      <h2>by Remo SkZ</h2>
+      <img src="images/gallaktik.jpg" alt="Graffiti cover at East London" />
+      <button>Remove from library</button>
+    </article>
+
+    <article class="library-item">
+      <h1>Baby GRowl</h1>
+      <h2>by Lupe sums</h2>
+      <img src="images/graffbaby.jpg" alt="Graffit cover at South London" />
+      <button>Remove from library</button>
+    </article>
+
+  </section>
+
+  <!-- Section 2 -->
+  <section class="layout">
+    <article class="main-content">Main Content</article>
+    <aside class="lh-content">L/H Content</aside>
+    <aside class="rh-content">R/H Content</aside>
+  </section>
+
+  <!-- Section 3 -->
+  <section class="navigation">
+    <nav>
+      <ul>
+        <li><a href="#"> About </a></li>
+        <li><a href="#"> Products </a></li>
+        <li><a href="#"> Contact </a></li>
+        <li id="logon"><a href="#">Logon</a></li>
+      </ul>
+    </nav>
+  </section>
+
+
+</body>
+</html>
