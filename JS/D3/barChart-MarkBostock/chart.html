@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Basic bar chart</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.3.9/d3.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.12.0/axios.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <style>
+
+  body{ background: slategray; box-sizing: border-box;}
+  section{ width: 80%; margin: 0 auto;}
+
+  /* Section 1 - Harcoded chart
+  ===========================*/
+
+  .chart-hardcoded > h1 {
+    text-align: center;
+  }
+
+  .chart-hardcoded{
+    padding: 2rem;
+    width: 500px;
+    margin: 0 auto;
+    background: white;
+    border: 2px solid black;
+  }
+
+  .chart-hardcoded div{
+    font: 10px sans-serif;
+    background-color: steelblue;
+    text-align: right;
+    padding: 3px;
+    margin: 1px;
+    color: white;
+  }
+
+  /* Section 2 -Switching to SVG
+  =============================*/
+
+  .svg-chart{
+    background: white;
+    width: 500px;
+    padding: 2rem;
+    margin-top: 3rem;
+    border: 2px solid black;
+ }
+
+  .svg-chart text {
+    fill: white;
+    font: 10px sans-serif;
+    text-anchor: end;
+  }
+
+  /* Section 3 -Remote CSV request
+  ===============================*/
+
+  </style>
+</head>
+<body>
+
+  <!-- Section 1 Harcoded chart-->
+  <section class="chart-hardcoded">
+    <h1> Harcoded Chart </h1>
+  </section>
+
+  <section class="svg-chart">
+    <h1> SVG chart </h1>
+    <svg class="svg-holder"></svg>
+  </section>
+
+<script>
+
+  /* SECTION 1 - HARDCODED CHART WITH ARRAY OF NUMERICAL DATA
+  =========================================================*/
+
+  var hardcodedData = [4, 8, 15, 16, 23, 42];
+
+  //Configure domain size and min/max range of graph
+  //Note** X returns the scale value of the input
+  var x = d3.scale.linear()
+            .domain([0, d3.max(hardcodedData)])
+            .range([0,500]);
+
+  //Append to DOM
+  d3.select('.chart-hardcoded')
+    .selectAll('div')
+    .data(hardcodedData)
+    .enter()
+    .append('div')
+    .style('width', function(d){ return x(d) + 'px' })
+    .text(function(d){ return d });
+
+
+  /* SECTION 2 - HARCODED CHART WITH SVG
+  ======================================*/
+
+  //set base values for graph width and bar height
+  var graphWidth = 500, barHeight = 20;
+
+  //Config range from data values
+  var svgX = d3.scale.linear()
+               .domain([0, d3.max(hardcodedData)])
+               .range([0, graphWidth]);
+
+  //Set SVG holder width and and size based on base width * length
+  var chart = d3.select('.svg-holder')
+                .attr('width', graphWidth)
+                .attr('height', barHeight * hardcodedData.length);
+
+  //Bind data to 'g' and set placement using transform 20px apart
+  var bar = chart.selectAll('g')
+                 .data(hardcodedData)
+                 .enter()
+                 .append('g') //<-- g acts as the iterator | rect and and text are appended to new 'g' on cycle
+                 .attr('transform', function(d,i){ return 'translate(0,' + i * barHeight + ')'; });
+
+  //Append rect graph bar to 'g' computing width from scale, fill from odd/even
+  bar.append('rect')
+     .attr('width', function(d){ return svgX(d); })
+     .attr('fill', function(d,i){ return i % 2 === 0 ? 'steelblue' : 'slategray'; })
+     .attr('height', barHeight - 1);
+
+  //Append text to 'g'
+  bar.append("text")
+     .attr("x", function(d) { return svgX(d) - 3; })
+     .attr("y", barHeight / 2)
+     .attr("dy", ".35em")
+     .text(function(d) { return d; });
+
+
+
+</script>
+</body>
+</html>
