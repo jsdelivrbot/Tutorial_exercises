@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.3.9/d3.js"></script>
+  <script src="/libs/colorBrewer.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <title>Interactive football scores</title>
+  <!-- Base chart / container styles -->
+  <style>
+    section { margin-top: 3rem;}
+    div{ text-align: center }
+    div#football-viz{ margin-top: 5rem;}
+    h1{ text-align: center; }
+    button { background: white; padding: .5rem; border: 1px solid green; margin: 0 .2rem; }
+    svg{ width: 500px; height: 500px; border: 1px solid lightgrey}
+    text{ font-size: 10px;}
+    g > text.active { font-size: 30px; }
+    circle { fill: rgb(127, 191, 144); stroke: black, stroke-width: 1px; }
+    circle.active{ fill: rgb(0, 64, 17); }
+    circle.inactive { fill: grey; }
+  </style>
+</head>
+<body onload="createFootballVisualization()">
+
+  <main class="container">
+
+    <!-- Football visualization -->
+    <div id="football-viz">
+      <svg></svg>
+    </div>
+
+    <!--Data controller -->
+    <div id="controls">
+
+    </div>
+
+  </main>
+
+
+<script>
+
+  /* INTERACTIVE DATA GRAPH
+  =======================*/
+
+  /**
+  * @function - Call football.csv data
+  * @return - Error if I/O issue | vis
+  * func w/ data if successful
+  */
+  function createFootballVisualization(){
+    d3.csv('data/football.csv',function(err,data){
+      if(err){
+        return console.log(err);
+      }
+      runVisualization(data);
+    });
+  }
+
+  /**
+  * @function - Create group and label componenets
+  * for teams and append to SVG.
+  */
+  function runVisualization(data){
+
+    //create groups for individual teams and
+    //bind data to each element
+    d3.select('svg')
+       .append('g')
+       .attr('id', 'teamG')
+       .attr('transform', 'translate(50,300)')
+       .selectAll('g')
+       .data(data)
+       .enter()
+       .append('g')
+       .attr('class', 'overallG')
+       .attr('transform', function(team,i){ return 'translate(' + (i * 50) + ',0)' });
+
+    //assign array of bound team elemennts
+    var team = d3.selectAll('g.overallG');
+
+    //append 20r circle to each <g> in array
+    team.append('circle').attr('r', 20);
+
+    //append text to each <g> in array
+    team.append('text')
+        .style('text-anchor', 'middle')
+        .attr('y', 30)
+        .text(function(team){ return team.team });
+
+    //Iterate over all team object keys and
+    //create new key array filtering out team
+    //and region
+    var dataKeys = d3.keys(data[0]).filter(function(teamData){
+      return teamData != 'team' && teamData != 'region';
+    });
+
+    /* BUTTON LOGIC
+    --------------*/
+
+    d3.select('#controls')
+      .selectAll('button.teams')
+      .data(dataKeys)
+      .enter()
+      .append('button')
+      .on('click', buttonClick)
+      .html(function(d){ return d });
+
+    //Note: datapoint argument is sent automatically
+    //as it was bound on the d3.on
+    function buttonClick(datapoint){
+
+      //create maximum value by finding largest
+      //value in
+      var maxValue = d3.max(data, function(d){
+        return parseFloat(d[datapoint]);
+      });
+
+      //set radius scale based on maxvalue
+      var radiusScale = d3.scale.linear()
+          .domain([0, maxValue])
+          .range([2, 20]);
+
+      //manipulate team circle radius based on data
+      //key value selected
+      d3.selectAll('g.overallG')
+         .select('circle')
+         .attr('r', function(d){
+           return radiusScale(d[datapoint])});
+
+    }
+
+
+  }//end of runVisualization function
+
+
+</script>
+</body>
+</html>
