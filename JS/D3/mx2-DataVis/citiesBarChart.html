@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.3.9/d3.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <title>CSV and JSON data display</title>
+  <style>
+    section { margin-top: 3rem;}
+    h1{ text-align: center; }
+  </style>
+</head>
+<body>
+
+  <main class="container">
+
+    <!-- CSV data -->
+    <section id="upside-vert" class="col-sm-8 col-sm-offset-2">
+      <h1> CSV loaded data </h1>
+      <svg id="upside-chart" style="height: 480px; width: 460px;"></svg>
+    </section>
+
+    <!-- JSON data -->
+    <section id="bar-tweets" class="col-sm-8 col-sm-offset-2">
+      <h1> Tweet bar graph </h1>
+      <svg id="tweet" style="width: 500px; height: 500px;"></svg>
+    </section>
+
+
+  </main>
+
+
+<script>
+
+  /* VERTICAL CHART WITH CSV DATA
+  ==============================*/
+
+  //load data from folder and pass to visualization
+  //function
+  d3.csv('/data/cities.csv', (err,data)=>{
+    if(err){
+      return console.log(err);
+    }
+    console.log(data);
+    visualizeData(data);
+  })
+
+  function visualizeData(cityData){
+    //set max population from highest value in csv
+    //and set domain/scale.
+    var maxPopulation = d3.max(cityData, function(city){
+      return parseInt(city.population);
+    });
+    var yScale = d3.scale.linear().domain([0,maxPopulation]).range([0,460]);
+
+    //select HTML element to bind city data
+    //to and run enter() cycle for data
+    //d3.select('section.upside-vert')
+    d3.select('svg')
+      .selectAll('rect')
+      .data(cityData)
+      .enter()
+      .append('rect')
+      .attr('width', 50)
+      .attr('height', function(d) { return yScale(parseInt(d.population)); })
+      .attr('x', function(d,i){ return i * 60; })
+      .attr('y', function(d){ return 480 - yScale(parseInt(d.population)); })
+      .style('fill', '#7FBF90')
+      .style('stroke-width', '1px')
+      .style('stroke', '#004011')
+      .style('opacity', 0.6);
+
+  }//end of visualize func
+
+
+  /* VERTICAL CHART WITH JSON DATA
+  ================================s*/
+
+  //load tweets from file and pass data to
+  //visualization function
+  d3.json('data/tweets.json', function(err,data){
+     if(err){
+       return console.log(err);
+     }
+     visualizeJSONdata(data.tweets);
+  });
+
+  function visualizeJSONdata(data){
+
+    //crteate new array of objects using tweet.user as unique
+    //id to pull all tweets made by matching username
+    //into seprate array
+    var nestedTweets = d3.nest()
+        .key(function(tweet){ return tweet.user })
+        .entries(data);
+
+    //add new attrinute to object with array
+    //length of number of tweets user has
+    //made
+    nestedTweets.forEach(function(user){
+      user.numberOfTweets = user.values.length;
+    });
+
+    //set max tweets and domain and scale
+    var maxTweets = d3.max(nestedTweets, function(user){ return user.numberOfTweets });
+    var yScale = d3.scale.linear().domain([0,maxTweets]).range([0,100]);
+
+    var test = d3.select('#tweet');
+    console.log(test);
+
+
+    d3.select('#tweet')
+      .selectAll('rect')
+      .data(nestedTweets)
+      .enter()
+      .append('rect')
+      .attr('width', 50)
+      .attr('height', function(user){ return yScale(user.numberOfTweets) })
+      .attr('x', function(user,i){ return i * 60; })
+      .attr('y', function(user){ return 100 - yScale(user.numberOfTweets) })
+      .style('fill', '#7FBF90')
+      .style('stroke-width', '1px')
+      .style('stroke', '#004011')
+      .style('opacity', 0.6);
+
+  } //end of JSON visualize func
+
+</script>
+</body>
+</html>
