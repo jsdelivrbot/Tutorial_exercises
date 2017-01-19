@@ -27,6 +27,11 @@
       <svg id="tweet" style="width: 500px; height: 500px;"></svg>
     </section>
 
+    <!-- Scatterplot with JSON data -->
+    <section id="scatterplot-tweets" class="col-sm-8 col-sm-offset-2">
+      <h1> Tweet Scatterplot </h1>
+      <svg id="tweet-scatterplot" style="width: 500px; height: 500px;"></svg>
+    </section>
 
   </main>
 
@@ -42,7 +47,6 @@
     if(err){
       return console.log(err);
     }
-    console.log(data);
     visualizeData(data);
   })
 
@@ -75,7 +79,7 @@
 
 
   /* VERTICAL CHART WITH JSON DATA
-  ================================s*/
+  ================================*/
 
   //load tweets from file and pass data to
   //visualization function
@@ -106,10 +110,7 @@
     var maxTweets = d3.max(nestedTweets, function(user){ return user.numberOfTweets });
     var yScale = d3.scale.linear().domain([0,maxTweets]).range([0,100]);
 
-    var test = d3.select('#tweet');
-    console.log(test);
-
-
+    //append data to SVG chart
     d3.select('#tweet')
       .selectAll('rect')
       .data(nestedTweets)
@@ -125,6 +126,69 @@
       .style('opacity', 0.6);
 
   } //end of JSON visualize func
+
+
+  /* SCATTERPLOT CHART WITH JSON DATA
+  ==================================*/
+
+  d3.json('data/tweets.json', function(err,data){
+    if(err){
+      return console.log(err);
+    }
+    scatterplotTweets(data.tweets);
+  });
+
+  function scatterplotTweets(data){
+
+    //Create 2 new attributes on object based on popularity
+    //of tweet and date/time tweet was made
+    data.forEach(function(tweet){
+      tweet.impact = tweet.favorites.length + tweet.retweets.length;
+      tweet.tweetTime = new Date(tweet.timestamp);
+    })
+
+    //Retrieve the value of the maximum impact tweet
+    var maxImpact = d3.max(data, function(tweet){ return tweet.impact })
+
+    //Set array of min/max values based on tine if tweet
+    var timeStartAndEnd = d3.extent(data, function(tweet){
+      return tweet.tweetTime;
+    });
+
+    //Place tweets on -- x -> axis based on earliest time
+    //Earlier tweets will postion closer to the
+    //left and later to the right
+    var timeRamp = d3.time.scale().domain(timeStartAndEnd).range([20,480]);
+
+    //Place tweets higher in the graph - y axis -
+    //based on tweet impact
+    var yScale = d3.scale.linear().domain([0, maxImpact]).range([0,460]);
+
+    //Assign larger raidus to tweets with the
+    //highest impact value
+    var radiusScale = d3.scale.linear().domain([0,maxImpact]).range([1,20]);
+
+    //range from opac to red based on the value
+    //of tweet impact
+    var colorScale = d3.scale.linear().domain([0,maxImpact]).range(['white', '#004011']);
+
+    //render data
+    d3.select('#tweet-scatterplot')
+      .selectAll('circle')
+      .data(data)
+      .enter()
+      .append('circle')
+      .attr('r', function(tweet){ return radiusScale(tweet.impact) }) //width of radius based on impact
+      .attr('cx',function(tweet){ return timeRamp(tweet.tweetTime) }) //postion of x based on time
+      .attr('cy',function(tweet){ return 480 - yScale(tweet.impact)}) //position of y based on impact
+      .style('fill', function(tweet){ return colorScale(tweet.impact)}) //color of circle based on impact
+      .style('stroke', 'black')
+      .style('stroke-width', '1px');
+
+
+  }//end of scatterplot visulaization
+
+
 
 </script>
 </body>
