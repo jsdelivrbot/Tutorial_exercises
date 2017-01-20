@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <title>SVG</title>
+</head>
+<style>
+  h3{ margin-bottom: 3rem; text-align: center; }
+  svg{ margin: 0 auto; display: block;}
+  section{ margin-top: 9rem;}
+</style>
+<body>
+
+  <main class="container">
+
+    <section id="easy-pie" class="col-sm-8 col-sm-offset-2">
+      <h3> Scores pie </h3>
+    </section>
+
+    <section id="another-pie" class="col-sm-8 col-sm-offset-2">
+      <h3> Dashing Pies </h3>
+    </section>
+
+  </main>
+
+<script>
+
+  /* BASIC PIE WITH 2 DATA OBJECTS
+  ===============================*/
+
+  //create pie chart variables
+  var width = 300, height = 300, radius = (width - 2) / 2;
+
+  //computes the start and end angles of the arcs
+  //based on the dataset provided.
+  var pie = d3.layout.pie()
+              .value(function(d){ return d.percent; })
+              .sort(null);
+
+  //define the radius of the pie chart, 0 used as pie
+  //being created. (inner = radius/2) for donought
+  var arc = d3.svg.arc()
+              .innerRadius(radius / 2)
+              .outerRadius(radius);
+
+  //sets the ordinal scale for the colors that will
+  //be used for the different slices of data
+  var color = d3.scale.ordinal()
+                .range(['#e75244','#33bb9d']);
+
+  //Set and select container and append
+  //svg and group
+  var svg =  d3.select('#easy-pie')
+               .append('svg')
+               .attr({ width: width, height: height, class: 'shadow' })
+               .append('g')
+               .attr({
+                 //set g to middle of svg component
+                 transform: 'translate(' + width/2 + ',' + width/2 + ')'
+               });
+
+  //Retrieve JSON data
+  d3.json('/data/simplepie.json', function(err,data){
+    if(err){
+      return console.log(err);
+    }
+    console.log(data);
+    runVisualization(data);
+  })
+
+  function runVisualization(dataset){
+
+    //Add new paths to svg with % of pie being
+    //calculated by pie(<%>)
+    var path = svg.selectAll('path')
+                  .data(pie(dataset))
+                  .enter()
+                  .append('path')
+                  .attr({
+                    d: arc,
+                    fill: function(d,i){ return color(i) }
+                  })
+                  .style({
+                    'fill-opacity': .15,
+                    stroke: function(d,i){ return color(i) }
+                  });
+
+    //Append name and % text label to chart
+    var text = svg.selectAll('text')
+                	.data(pie(dataset))
+                	.enter()
+                	.append("text")
+                	.attr("transform", function (d) {
+                		return "translate(" + arc.centroid(d) + ")";
+                	})
+                	.attr("text-anchor", "middle")
+                	.text(function(d){
+                		return d.data.name+" ("+d.data.percent+"%)" ;
+                	})
+                	.style({
+                		fill:function(d,i){
+                			return color(i);
+                		},
+                		'font-size':'18px',
+                	});
+
+  }
+
+  /* BASIC PIE WITH MORE OBJECTS (CSV)
+  ==================================*/
+
+  var x, cbError, cbData;
+
+  var width = 300, height = 300, radius = (width - 2) / 2;
+
+  var csvColor = d3.scale.ordinal()
+                    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+  var csvArc = d3.svg.arc()
+                 .outerRadius(radius - 10)
+                 .innerRadius(10);
+
+  var csvPie = d3.layout.pie()
+                 .value(function(d){ return d.population })
+                 .sort(null);
+
+  var csvSvg = d3.select('#another-pie')
+                 .append('svg')
+                 .attr({
+                   width: width,
+                   height: height
+                 })
+                 .append('g')
+                 .attr({
+                   transform: 'translate(' + width / 2 + ',' + width / 2 + ')'
+                 });
+
+  d3.csv('/data/population.csv', type ,function(err,data){
+    if(err){
+      throw err.statusText;
+    }
+    console.log('data in cb')
+    console.log(data);
+    runCsvVisualization(data);
+    x = csvPie(data); //test to view the data
+  });
+
+  function runCsvVisualization(dataset){
+    var g = csvSvg.selectAll('.arc')
+                  .data(csvPie(dataset))
+                  .enter()
+                  .append('g')
+                  .attr('class', 'arc');
+
+    g.append('path')
+      .attr('d', csvArc)
+      .style('fill', function(d,i){ return csvColor(d.data.age) });
+
+    g.append('text')
+      .attr('transform', function(d){ return 'translate(' + arc.centroid(d) + ')'})
+      .attr('dy','.35em')
+      .text(function(d){ return d.data.age });
+
+  }
+
+
+  //Coerce string to number
+  function type(d){
+    d.population = +d.population;
+    return d;
+  }
+
+
+
+</script>
+</body>
+</html>
