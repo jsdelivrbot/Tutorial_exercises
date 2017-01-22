@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <title>SVG</title>
+</head>
+<style>
+  h1{ margin-bottom: 3rem; text-align: center; }
+  svg{ padding: 0 2rem; margin: 0 auto; display: block; border: 1px solid rgba(2, 102, 116, 0.60);}
+  section{ margin-top: 9rem;}
+  text{ fill: lightgrey; }
+  .x-axis path,
+  .x-axis line{
+    fill: none;
+    stroke: rgb(2,102,116);
+    shape-rendering: crispEdges;
+  }
+  .x-axes text{ fill: rgb(2,102,116); }
+</style>
+<body>
+
+  <section id="bar">
+
+  </section>
+
+  <!--Scatterplot graph
+  cx = Day average temperature
+  cy = Day Wind Speed
+  r = Day degree
+  -->
+  <section id="scatter">
+    <h1> Day Wind / Temp pressures </h1>
+    <svg></svg>
+  </section>
+
+
+<script>
+
+/* SCATTER AND BAR CHART BASED ON WEATHER
+   API CALL ============================*/
+
+var width = 500, height = 500;
+
+var scatterSVG = d3.select('#scatter')
+                   .select('svg')
+                   .attr({
+                      width: width + 60,
+                      height: height + 60
+                    });
+
+var barSVG = d3.select('#bar')
+               .select('svg')
+               .attr({
+                  width: width,
+                  height: height
+                });
+
+//Display date in
+function scatterDate(epoch){
+  var date = new Date(0);
+  date.setUTCSeconds(epoch);
+  return date.getDate() + '/' + ( date.getMonth() + 1 ) + '/' + date.getFullYear();
+}
+
+//
+d3.json('/data/weather.json', function(err,data){
+  if(err){
+    throw new Error(err);
+  }
+  console.log(data);
+  runScatterVisualization(data);
+});
+
+/**
+* @function - Visualize
+*
+*/
+function runScatterVisualization(data){
+
+  //Set maximum temp from all values
+  //held in data
+  var maximumTemp = d3.max(data, function(d){
+    return d.temp.max;
+  });
+
+  //Set maximum wind speed from al
+  var maximumWindSpeed = d3.max(data, function(d){
+    return d.speed;
+  });
+
+  var maximumDegree = d3.max(data, function(d){
+    return d.deg;
+  });
+
+  //Scale the ouptut for the X axis
+  var xTempScale = d3.scale.linear()
+                .domain([1, maximumTemp])
+                .range([0, width - 20]);
+
+  //Scale the ouptut for the Y axis
+  var yWindScale = d3.scale.linear()
+                    .domain([0, maximumWindSpeed])
+                    .range([0, height - 20]);
+
+  //Scale the radius based on degree
+  var degRaidusScale = d3.scale.linear()
+                        .domain([0,maximumDegree])
+                        .range([5, 20]);
+
+  //Scale the circle color based on strength of degree
+  var degColorScale = d3.scale.linear()
+                        .domain([0, maximumDegree])
+                        .range(['rgba(2, 102, 116, 0.15)', 'rgba(2, 102, 116, 1)'])
+
+
+  //Apend circles to SVG
+  scatterSVG.selectAll('circle')
+            .data(data)
+            .enter()
+            .append('circle')
+            .attr({
+              cx: function(d){ return xTempScale(d.temp.max); },
+              cy: function(d){ return yWindScale(d.speed); },
+              r: function(d){ return degRaidusScale(d.deg); }
+            })
+            .style('fill', function(d){ return degColorScale(d.deg) });
+
+
+  //Append TimeStamps to
+  scatterSVG.selectAll('text')
+            .data(data)
+            .enter()
+            .append('text')
+            .text(function(d){
+              return scatterDate(d.dt);
+            }).
+            attr({
+              x: function(d){ return xTempScale(d.temp.max); },
+              y: function(d){ return yWindScale(d.speed); }
+            });
+
+  //Configuring Axis
+  var xAxis = d3.svg.axis()
+                .scale(xTempScale)
+                .orient('bottom')
+                .ticks(7);
+
+  var yAxis = d3.svg.axis()
+                .scale(yWindScale)
+                .orient('left');
+
+  scatterSVG.append('g')
+            .attr({
+              class: 'x-axis',
+              transform: 'translate(0,' + ( height + 20 ) + ')'
+            })
+            .call(xAxis);
+
+  scatterSVG.append('g')
+            .attr({
+              class: 'x-axis',
+              transform: 'translate(' + width + ',0)'
+            })
+            .call(yAxis);
+
+
+}
+
+
+
+</script>
+</body>
+</html>
