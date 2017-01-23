@@ -17,3 +17,11 @@
 ----
 
 #### <u>Improvements</u>
+
+1. <b> Weighted quick-union </b> : Modify quick-union to avoid all trees.
+  - Keep track of size of each tree (number of objects)
+  - Balance by linking root of smaller tree to route of larger tree
+
+
+2. <b>Path Compression</b>  
+  - Reassign root id of children to flatten the tree
