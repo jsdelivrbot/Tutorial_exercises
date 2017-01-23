@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.3.9/d3.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <title>CSV and JSON data display</title>
+  <style>
+    section { margin-top: 10rem; text-align: center; }
+    h1{ text-align: center; }
+  </style>
+</head>
+<body>
+
+  <section id="simple-bar">
+    <button class="by25">Values to 25</button>
+    <button class="by100">Values to 100</button>
+    <button class="by1000">Values to 1000</button>
+  </section>
+
+
+<script>
+
+//Helper - Random dataset generator to mimic
+//New data recieved from API
+function generateRandomDataset(N){
+  var newInts = [];
+  for(var i = 0; i < 20; i++){
+    newInts[i] = Math.floor(Math.random() * N) + 1;
+  }
+  return newInts;
+}
+
+//Width and height
+var width = 500;
+var height = 100;
+var barPadding = 1;
+var svg;
+
+//Dataset and scaling ---------------------
+var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13, 11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
+
+var xScale = d3.scale.ordinal()
+               .domain(d3.range(dataset.length))
+               .rangeRoundBands([0, width], 0.1);
+
+var yScale = d3.scale.linear()
+               .domain([0, d3.max(dataset)])
+               .range([0, height]);
+
+//-----------------------------------
+
+// Extracted functionality ---------
+
+//Newly rendered elements to the screen
+//note. dur to enter() being called
+function renderRectangles(parent,dataset){
+  parent.selectAll('rect')
+     .data(dataset)
+     .enter()
+     .append('rect')
+     .attr({
+       x: function(d,i){ return xScale(i); },
+       y: function(d){ return height - yScale(d); },
+       height: function(d){ return yScale(d) },
+       fill: function(d,i){ return 'rgb(0,0,' + ( d * 10 ) + ')' }
+      })
+      .attr('width', xScale.rangeBand());
+}
+
+//Newly rendered text to the screen. Note
+//enter() fires when there are elements that
+//require binding
+function renderText(parent, dataset){
+  parent.selectAll('text')
+     .data(dataset)
+     .enter()
+     .append('text')
+     .text(function(d){
+       return d;
+     })
+     .attr({
+       'text-anchor': 'middle',
+        x: function(d,i){ return xScale(i) + xScale.rangeBand() / 2 },
+        y: function(d){ return height - yScale(d) + 14; },
+        fill: 'white'
+     });
+}
+
+//Updating SVG with new values. No enter() and append()
+//as elements already exist in the DOM.
+function updateDataSet(parent,dataset){
+
+  //Update Yscale domain input as larger values
+  //may be included in the new dataset
+  yScale.domain([0, d3.max(dataset)]);
+
+  //Update rectangle y/height values. No need to
+  //chnage width as dataset numbers stay the same
+  parent.selectAll('rect')
+        .data(dataset)
+        .transition()
+        .delay(function(d,i){ return ( i / dataset.length) * 1000; })
+        .duration(1000)
+        .ease('linear')
+        .attr({
+          y: function(d){ return height - yScale(d); },
+          height: function(d){ return yScale(d) },
+          fill: function(d,i){ return 'rgb(0,0,' + ( d * 10 ) + ')' }
+        });
+
+  //Update text and reset positioning to
+  //correlate with new data.
+  parent.selectAll('text')
+        .data(dataset)
+        .transition()
+        .delay(500)
+        .duration(500)
+        .ease('linear')
+        .text(function(d){ return d; })
+        .attr({
+          x: function(d,i){ return xScale(i) + xScale.rangeBand() / 2; },
+          y: function(d){ return height - yScale(d) + 14; }
+        });
+
+}
+
+// --------------------------------
+
+//Append data to DOM ---------------
+
+//On intial load render chart containing
+//base data to DOM
+svg = d3.select('#simple-bar')
+            .append('svg')
+            .attr({
+              width: width,
+              height: height
+            });
+
+renderRectangles(svg, dataset);
+renderText(svg, dataset);
+
+
+// -----------------------------------
+
+//Add Event listeners ----------------
+
+d3.selectAll('button')
+  .on('click', function(){
+    switch(this.classList[0])
+    {
+      case 'by25':
+          updateDataSet(svg, generateRandomDataset(25));
+          break;
+      case 'by100':
+          updateDataSet(svg, generateRandomDataset(100));
+          break;
+      case 'by1000':
+          updateDataSet(svg, generateRandomDataset(1000));
+          break;
+    }
+  });
+
+// ----------------------------------
+
+
+//-----------------------------------
+
+
+
+</script>
+</body>
+</html
