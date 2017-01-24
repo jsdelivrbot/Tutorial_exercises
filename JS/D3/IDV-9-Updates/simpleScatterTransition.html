@@ -5,168 +5,253 @@
   <meta name="viewport" content="width=device-width">
   <script src="https://d3js.org/d3.v3.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <title>SVG</title>
 </head>
 <style>
   h1{ margin-bottom: 3rem; text-align: center; }
-  svg{ padding: 0 2rem; margin: 0 auto; display: block; border: 1px solid rgba(2, 102, 116, 0.60);}
+  svg{ margin: 0 auto; display: block; border: 1px solid rgba(2, 102, 116, 0.60);}
   section{ margin-top: 9rem;}
-  text{ fill: grey; }
-  .x-axis path,
-  .x-axis line{
+  text{ fill: black; }
+  .axis path,
+  .axis line{
     fill: none;
     stroke: rgb(2,102,116);
     shape-rendering: crispEdges;
   }
-  .x-axes text{ fill: rgb(2,102,116); }
+  .axis text{ fill: rgb(2,102,116); }
 </style>
 <body>
 
   <!--Scatterplot graph
-  cx = Day average temperature
-  cy = Day Wind Speed
-  r = Day degree
+  cx = Hourly range
+  cy = Temperature
+  r = Wind Speed
   -->
   <section id="scatter">
     <h1> Day Wind / Temp pressures </h1>
     <svg></svg>
+    <select>
+      <option value="#">Select day</option>
+      <option value="day1" disabled>Today</option>
+      <option value="day2">Tommorow</option>
+      <option value="day3">Next day</option>
+      <option value="day4">Day after</option>
+      <option value="day5">Another day after</option>
+    </select>
   </section>
 
 
 <script>
 
-/* Scatter chat transform
+//Define copy method
+Array.prototype.clone = function(start,end){
+  return this.slice(start,end);
+}
+
+/* Weather Scatter transform
 ========================*/
 
-var width = 500, height = 300, padding = 30;
+var width = 550, height = 300, padding = 50, dailyData = [];
 
-var scatterSVG = d3.select('#scatter')
+//Stub data intended to act like state in React
+var dayData = {};
+
+//s
+var svg = d3.select('#scatter')
                    .select('svg')
                    .attr({
-                      width: width + 60,
-                      height: height + 60
+                      width: width,
+                      height: height
                     });
 
-var barSVG = d3.select('#bar')
-               .select('svg')
-               .attr({
-                  width: width,
-                  height: height
-                });
+var searchString = 'http://api.openweathermap.org/data/2.5/forecast?q=London%2C%20UK&mode=json&appid=3630b8bbc7dfc6e841f7387ec0db6ac9';
 
-//
-d3.json('/data/weather.json', function(err,data){
-  if(err){
-    throw new Error(err);
-  }
-  console.log(data);
-  runScatterVisualization(data);
-});
+//Call 5day/3hourly forecast data
+axios.get(searchString)
+    .then(function(response){
+      parseIntoObjectArray(response.data.list); //Ln - Executed 1st
+      runScatterVisualization(dayData.day2)
+    })
+    .catch(function(error){
+      console.log(error);
+    });
+
 
 /**
-* @function - Visualize
+* @function - Visualize 3hourly day data
 *
 */
 function runScatterVisualization(data){
 
+  /* SET MIN /MAX/AXIS FOR FORECAST DATA
+  ====================================*/
+
   //Set maximum temp from all values
   //held in data
   var maximumTemp = d3.max(data, function(d){
-    return d.temp.max;
+    return d.temp;
   });
 
   //Set maximum wind speed from al
   var maximumWindSpeed = d3.max(data, function(d){
-    return d.speed;
+    return d.wind;
   });
 
-  var maximumDegree = d3.max(data, function(d){
-    return d.deg;
-  });
 
   //Scale the ouptut for the X axis
-  var xTempScale = d3.scale.linear()
-                .domain([1, maximumTemp])
+  var xHourScale = d3.scale.linear()
+                .domain([0, 21])
                 .range([padding, width - padding * 2]);
 
   //Scale the ouptut for the Y axis
-  var yWindScale = d3.scale.linear()
-                    .domain([0, maximumWindSpeed])
+  var yTempScale = d3.scale.linear()
+                    .domain(d3.extent(data, function(d){ return d.temp }))
                     .range([height - padding, padding]);
 
   //Scale the radius based on degree
-  var degRaidusScale = d3.scale.linear()
-                        .domain([0,maximumDegree])
+  var windRadiusScale = d3.scale.linear()
+                        .domain(d3.extent(data, function(d){ return d.wind }))
                         .range([5, 20]);
 
   //Scale the circle color based on strength of degree
-  var degColorScale = d3.scale.linear()
-                        .domain([0, maximumDegree])
+  var windColorScale = d3.scale.linear()
+                        .domain(d3.extent(data, function(d){ return d.wind }))
                         .range(['rgba(2, 102, 116, 0.15)', 'rgba(2, 102, 116, 1)'])
 
+  //Create data temp and hour axis
+  var XAxis = d3.svg.axis().scale(xHourScale).orient('bottom').ticks(7);
+  var YAxis = d3.svg.axis().scale(yTempScale).orient('left');
 
-  //Apend circles to SVG
-  scatterSVG.selectAll('circle')
+
+  /* APPEND DATA TO DOM
+  ===================*/
+
+  //Apend data circles to SVG
+  svg.selectAll('circle')
             .data(data)
             .enter()
             .append('circle')
             .attr({
-              cx: function(d){ return xTempScale(d.temp.max); },
-              cy: function(d){ return yWindScale(d.speed); },
-              r: function(d){ return degRaidusScale(d.deg); }
+              cx: function(d){ return xHourScale(d.timeNum); },
+              cy: function(d){ return yTempScale(d.temp); },
+              r: function(d){ return windRadiusScale(d.wind); }
             })
-            .style('fill', function(d){ return degColorScale(d.deg) });
+            .style('fill', function(d){ return windColorScale(d.wind) });
 
 
-  //Append TimeStamps to
-  scatterSVG.selectAll('text')
+  //Append TimeStamps to data circles
+  svg.selectAll('text')
             .data(data)
             .enter()
             .append('text')
             .text(function(d){
-              return scatterDate(d.dt);
+              return d.timeText;
             }).
             attr({
-              x: function(d){ return xTempScale(d.temp.max); },
-              y: function(d){ return yWindScale(d.speed); }
+              x: function(d){ return xHourScale(d.timeNum); },
+              y: function(d){ return yTempScale(d.temp); }
             });
 
-  //Configuring Axis
-  var xAxis = d3.svg.axis()
-                .scale(xTempScale)
-                .orient('bottom')
-                .ticks(7);
 
-  var yAxis = d3.svg.axis()
-                .scale(yWindScale)
-                .orient('left');
+  /* APPEND AXIS TO DOM
+  ====================*/
 
-  scatterSVG.append('g')
-            .attr({
-              class: 'x-axis',
-              transform: 'translate(0,' + ( height + 20 ) + ')'
-            })
-            .call(xAxis);
+  //Append X (Hour) axis
+  svg.append('g')
+     .attr({
+       class: 'axis',
+       transform: 'translate(0,' + (height - padding) + ')'
+     }).call(XAxis);
 
-  scatterSVG.append('g')
-            .attr({
-              class: 'x-axis',
-              transform: 'translate(' + width + ',0)'
-            })
-            .call(yAxis);
+  svg.append('g')
+     .attr({
+       class: 'axis',
+       transform: 'translate(' +  padding  + ',0)'
+     }).call(YAxis);
 
 
 }
 
-//Helper functions -------------------------
+/* HELPER FUNCTIONS
+=============================================================================*/
 
-function scatterDate(epoch){
-  var date = new Date(0);
-  date.setUTCSeconds(epoch);
-  return date.getDate() + '/' + ( date.getMonth() + 1 ) + '/' + date.getFullYear();
+
+//Create Date object and transform to D3 scaleable
+//numbers
+function transformDate(epoch,type){
+  var date = new Date(epoch);
+  switch(type){
+    case 'hour3':
+      return{
+        dateString: date.getHours() + ':00',
+        dateNum: date.getHours()
+        }
+      break;
+    case undefined:
+      return date.getDate() + '/' + ( date.getMonth() + 1 ) + '/' + date.getFullYear();
+      break;
+  }
 }
 
+//Convert complex hourly object into smaller
+//usable object
+function addNew3HourData(hourlyObj){
+  var dateProps = transformDate(hourlyObj.dt_txt, 'hour3');
+  return{
+    timeText: dateProps.dateString,
+    timeNum: dateProps.dateNum,
+    dtStamp: hourlyObj.dt,
+    temp: hourlyObj.main.temp,
+    wind: hourlyObj.wind.speed
+  }
+}
 
+//Parse hourly list into array set containg 3 hourly
+//forecasts
+function parseIntoObjectArray(data){
+  //Set function variables
+  var daily = [], hourlyData = data, trimmedData;
+
+  //Splice inequal first day coordinates out of array and
+  var newestTime = parseInt(data[0].dt_txt.split(' ')[1]);
+  var forecastLeftToday = ( 24 - newestTime ) / 3;
+
+  //Split days into divisble 8 segment
+  var today = hourlyData.slice(0, forecastLeftToday);
+  var otherDays = hourlyData.slice(forecastLeftToday, hourlyData.length);
+
+  //Push inequal data for today at start of daily
+  //data array
+  today.forEach(function(day){
+    daily.push(addNew3HourData(day));
+  })
+  dailyData.push(daily);
+  daily = [];
+
+  //Cycle through 4 day forecast and transform / push
+  //new objects
+  for(var i = 1; i < otherDays.length + 1; i++){
+    if(i % 8 === 0){
+      daily.push(addNew3HourData(otherDays[i-1]));
+      dailyData.push(daily);
+      daily = [];
+    } else{
+      daily.push(addNew3HourData(otherDays[i-1]));
+    }
+  }
+  console.log(dailyData);
+  mimicReactState();
+}
+
+//Mimic setting of react state
+function mimicReactState(){
+  dayData.today = dailyData[0]
+  dayData.day2 = dailyData[1];
+  dayData.day3 = dailyData[2];
+  dayData.day4 = dailyData[3];
+  dayData.day5 = dailyData[4];
+}
 
 
 </script>
