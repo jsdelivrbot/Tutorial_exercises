@@ -11,7 +11,7 @@
   h1{ margin-bottom: 3rem; text-align: center; }
   svg{ padding: 0 2rem; margin: 0 auto; display: block; border: 1px solid rgba(2, 102, 116, 0.60);}
   section{ margin-top: 9rem;}
-  text{ fill: lightgrey; }
+  text{ fill: grey; }
   .x-axis path,
   .x-axis line{
     fill: none;
@@ -21,10 +21,6 @@
   .x-axes text{ fill: rgb(2,102,116); }
 </style>
 <body>
-
-  <section id="bar">
-
-  </section>
 
   <!--Scatterplot graph
   cx = Day average temperature
@@ -39,10 +35,10 @@
 
 <script>
 
-/* SCATTER AND BAR CHART BASED ON WEATHER
-   API CALL ============================*/
+/* Scatter chat transform
+========================*/
 
-var width = 500, height = 500, padding: 30;
+var width = 500, height = 300, padding = 30;
 
 var scatterSVG = d3.select('#scatter')
                    .select('svg')
@@ -57,13 +53,6 @@ var barSVG = d3.select('#bar')
                   width: width,
                   height: height
                 });
-
-//Display date in
-function scatterDate(epoch){
-  var date = new Date(0);
-  date.setUTCSeconds(epoch);
-  return date.getDate() + '/' + ( date.getMonth() + 1 ) + '/' + date.getFullYear();
-}
 
 //
 d3.json('/data/weather.json', function(err,data){
@@ -98,12 +87,12 @@ function runScatterVisualization(data){
   //Scale the ouptut for the X axis
   var xTempScale = d3.scale.linear()
                 .domain([1, maximumTemp])
-                .range([0, width - 20]);
+                .range([padding, width - padding * 2]);
 
   //Scale the ouptut for the Y axis
   var yWindScale = d3.scale.linear()
                     .domain([0, maximumWindSpeed])
-                    .range([0, height - 20]);
+                    .range([height - padding, padding]);
 
   //Scale the radius based on degree
   var degRaidusScale = d3.scale.linear()
@@ -168,6 +157,15 @@ function runScatterVisualization(data){
 
 
 }
+
+//Helper functions -------------------------
+
+function scatterDate(epoch){
+  var date = new Date(0);
+  date.setUTCSeconds(epoch);
+  return date.getDate() + '/' + ( date.getMonth() + 1 ) + '/' + date.getFullYear();
+}
+
 
 
 
