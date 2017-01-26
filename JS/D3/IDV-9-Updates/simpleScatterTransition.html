@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width">
   <script src="https://d3js.org/d3.v3.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <title>SVG</title>
 </head>
@@ -12,7 +13,7 @@
   h1{ margin-bottom: 3rem; text-align: center; }
   svg{ margin: 0 auto; display: block; border: 1px solid rgba(2, 102, 116, 0.60);}
   section{ margin-top: 9rem;}
-  text{ fill: black; }
+  text{ fill: rgba(2, 102, 116, 0.60); }
   .axis path,
   .axis line{
     fill: none;
@@ -32,9 +33,9 @@
     <h1> Day Wind / Temp pressures </h1>
     <svg></svg>
     <select>
-      <option value="#">Select day</option>
-      <option value="day1" disabled>Today</option>
-      <option value="day2">Tommorow</option>
+      <option value="#" disabled>Select day</option>
+      <option value="today">Today</option>
+      <option value="day2" disabled>Tommorow</option>
       <option value="day3">Next day</option>
       <option value="day4">Day after</option>
       <option value="day5">Another day after</option>
@@ -42,7 +43,7 @@
   </section>
 
 
-<script>
+<script> //Need to break main body of data vis into helper functions
 
 //Define copy method
 Array.prototype.clone = function(start,end){
@@ -52,12 +53,13 @@ Array.prototype.clone = function(start,end){
 /* Weather Scatter transform
 ========================*/
 
-var width = 550, height = 300, padding = 50, dailyData = [];
+//Sizing and state varibales
+var width = 550, height = 300, padding = 80, dailyData = [];
 
 //Stub data intended to act like state in React
 var dayData = {};
 
-//s
+//Append SVG to
 var svg = d3.select('#scatter')
                    .select('svg')
                    .attr({
@@ -87,32 +89,21 @@ function runScatterVisualization(data){
   /* SET MIN /MAX/AXIS FOR FORECAST DATA
   ====================================*/
 
-  //Set maximum temp from all values
-  //held in data
-  var maximumTemp = d3.max(data, function(d){
-    return d.temp;
-  });
-
-  //Set maximum wind speed from al
-  var maximumWindSpeed = d3.max(data, function(d){
-    return d.wind;
-  });
-
-
   //Scale the ouptut for the X axis
   var xHourScale = d3.scale.linear()
                 .domain([0, 21])
-                .range([padding, width - padding * 2]);
+                .range([padding + 10, width - padding * 2]);
 
   //Scale the ouptut for the Y axis
   var yTempScale = d3.scale.linear()
-                    .domain(d3.extent(data, function(d){ return d.temp }))
+                    .domain([d3.min(data, function(d){ return d.temp }) - 10,
+                             d3.max(data, function(d){ return d.temp + 10 })])
                     .range([height - padding, padding]);
 
   //Scale the radius based on degree
   var windRadiusScale = d3.scale.linear()
                         .domain(d3.extent(data, function(d){ return d.wind }))
-                        .range([5, 20]);
+                        .range([5, 10]);
 
   //Scale the circle color based on strength of degree
   var windColorScale = d3.scale.linear()
@@ -120,8 +111,12 @@ function runScatterVisualization(data){
                         .range(['rgba(2, 102, 116, 0.15)', 'rgba(2, 102, 116, 1)'])
 
   //Create data temp and hour axis
-  var XAxis = d3.svg.axis().scale(xHourScale).orient('bottom').ticks(7);
-  var YAxis = d3.svg.axis().scale(yTempScale).orient('left');
+  var XAxis = d3.svg.axis()
+                .scale(xHourScale)
+                .tickFormat(function(d){ return renderAxisTime(d) })
+                .orient('bottom')
+                .ticks(5);
+  var YAxis = d3.svg.axis().scale(yTempScale).orient('left').ticks(5);
 
 
   /* APPEND DATA TO DOM
@@ -146,11 +141,14 @@ function runScatterVisualization(data){
             .enter()
             .append('text')
             .text(function(d){
-              return d.timeText;
-            }).
-            attr({
+              return d.timeNum < 12 ? d.timeText + 'am' : d.timeText + 'pm';
+            })
+            .style('writing-mode', 'tb')
+            .style('glyph-orientation-vertical', 0)
+            .attr({
+              'text-anchor': 'end',
               x: function(d){ return xHourScale(d.timeNum); },
-              y: function(d){ return yTempScale(d.temp); }
+              y: function(d){ return yTempScale(d.temp) - 10; }
             });
 
 
@@ -167,15 +165,79 @@ function runScatterVisualization(data){
   svg.append('g')
      .attr({
        class: 'axis',
+       id: 'left',
        transform: 'translate(' +  padding  + ',0)'
      }).call(YAxis);
 
 
+  /* SELECT EVENT HANDLER
+  =====================*/
+
+  d3.select('select')
+    .on('click', function(){
+      var $selection = $('select').val();
+      var forecast = dayData[$selection];
+
+      console.log(forecast);
+
+      //Recalibrate X/Y/Axis settings
+      yTempScale.domain(d3.extent(forecast, function(d){ return d.temp })).nice();
+      windRadiusScale.domain(d3.extent(forecast, function(d){ return d.wind }));
+      windColorScale.domain(d3.extent(forecast, function(d){ return d.wind }))
+      //XAxis = d3.svg.axis().scale(xHourScale).orient('bottom').ticks(7);
+      YAxis = d3.svg.axis().scale(yTempScale).orient('left').ticks(5);
+      svg.select('g#left')
+        .transition()
+        .duration(1000)
+        .call(YAxis);
+
+      //Change scale data
+      svg.selectAll('circle')
+         .data(forecast)
+         .transition()
+         .duration(1000)
+         .attr({
+           cx: function(d){ return xHourScale(d.timeNum); },
+           cy: function(d){ return yTempScale(d.temp); },
+           r: function(d){ return windRadiusScale(d.wind); }
+         })
+         .style('fill', function(d){ return windColorScale(d.wind) });
+
+      //Change text data
+      svg.selectAll('text')
+         .data(forecast)
+         .transition()
+         .duration(1000)
+         .text(function(d){
+           return d.timeNum < 12 ? d.timeText + 'am' : d.timeText + 'pm';
+         }).
+         attr({
+           x: function(d){ return xHourScale(d.timeNum); },
+           y: function(d){ return yTempScale(d.temp) - 10; }
+         });
+
+
+
+    });//end of event listener
+
 }
+
 
 /* HELPER FUNCTIONS
 =============================================================================*/
 
+/* Data VIS funcs
+-----------------*/
+function renderAxisTime(time){
+  if(time < 10){
+    return '0' + time + ':00';
+  }else{
+    return time + ':00'
+  }
+}
+
+/* API Response funcs
+-------------------*/
 
 //Create Date object and transform to D3 scaleable
 //numbers
@@ -240,7 +302,6 @@ function parseIntoObjectArray(data){
       daily.push(addNew3HourData(otherDays[i-1]));
     }
   }
-  console.log(dailyData);
   mimicReactState();
 }
 
