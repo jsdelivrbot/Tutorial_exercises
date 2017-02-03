@@ -9,4 +9,7 @@ it('renders correctly', () => {
   const tree = renderer.create(
     <Index />
   );
+
+  /* Added to test git push issue */
+
 });
