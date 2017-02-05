@@ -9,6 +9,13 @@ import React, { Component } from 'react';
 import { Drawer, View } from 'native-base';
 import { StyleSheet, Navigator } from 'react-native';
 
+import SideMenu from './SideMenu'
+import SettingsStore from './stores/settingsStore';
+import SplashScene from './scenes/SplashScene';
+import theme from './theme/base-theme';
+
+const settings = new SettingsStore();
+
 
 export default class AppContainer extends Component {
 
@@ -19,8 +26,10 @@ export default class AppContainer extends Component {
   constructor(props){
     super(props);
     this.state = {
-      store: {},
-      theme: null,
+      store: {
+        settings: settings
+      },
+      theme: theme,
       toggled: false
     }
     this.closeDrawer = this.closeDrawer.bind(this);
@@ -46,10 +55,11 @@ export default class AppContainer extends Component {
   }
 
   renderScene(route,navigator){
-    switch(route){
-      default: {
-        return null
+    switch(route.title){
+      case 'Splash': {
+        return <SplashScene {...route.passProps} navigator={navigator}/>
       }
+      default: { return null }
     }
   }
 
@@ -62,7 +72,9 @@ export default class AppContainer extends Component {
       <Drawer
         ref={(ref) => { return this._drawer = ref }}
         type="displace"
-        content={<View style={styles.drawer}/>}
+        content={<SideMenu
+          navigator={this._navigator}
+          theme={this.state.theme}/>}
         onClose={this.closeDrawer}
         onOpen={this.openDrawer}
         openDrawerOffset={0.2} >
@@ -70,6 +82,14 @@ export default class AppContainer extends Component {
           ref={(ref) => this._navigator = ref }
           configureScene={this.configureScene}
           renderScene={this.renderScene}
+          initialRoute={{
+            title: "Splash",
+            passProps: {
+              stores: this.state.store,
+              toggleDrawer: this.toggleDrawer.bind(this),
+              theme: this.state.theme
+            }
+          }}
         />
       </Drawer>
     )
