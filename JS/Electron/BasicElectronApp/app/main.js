@@ -1,5 +1,5 @@
 /***********************************
-Base electron file
+BASE ELCTRON LOGIC
 ***********************************/
 
 const electron = require('electron');
@@ -8,7 +8,9 @@ const app = electron.app;
 var ipc = electron.ipcMain;
 
 /**
+*
 * @event : Hook into application load
+*
 */
 app.on('ready', ()=>{
 
@@ -21,14 +23,16 @@ app.on('ready', ()=>{
   appWindow = new BrowserWindow({
     show: false
   });
-  appWindow.loadURL('http://www.github.com/charlie301');
+  appWindow.loadURL(`file://${__dirname}/index.html`);
 
   infoWindow = new BrowserWindow({
     width: 400,
     height: 300,
-    show: false
+    show: false,
+    transparent: true,
+    frame: false
   });
-  infoWindow.loadURL(`file://${__dirname}/views/info.html`)
+  infoWindow.loadURL(`file://${__dirname}/info.html`)
 
   /* HOOK INTO WINDOW RUNTIME
   -------------------------*/
