@@ -3,10 +3,12 @@
  */
 
 import React, { Component } from 'react';
+import Forecast from './components/Forecast';
 import {
   AppRegistry,
   StyleSheet,
   Text,
+  Image,
   TextInput,
   View
 } from 'react-native';
@@ -19,8 +21,15 @@ export default class WeatherBasic extends Component {
   */
   constructor(props){
     super(props);
-    this.state = { zip: '' };
     this._handleTextChange = this._handleTextChange.bind(this);
+    this.state = {
+      zip: '',
+      forecast: {
+        main: 'Clouds',
+        description: 'Few clouds',
+        temp: 46.2
+      }
+    };
   }
 
   /**
@@ -37,26 +46,37 @@ export default class WeatherBasic extends Component {
   */
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          {this.state.zip}
-        </Text>
-        <TextInput
-          style={styles.input}
-          onSubmitEditing={this._handleTextChange} />
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
+
+      <Image source={require('./images/background.png')}
+        resizeMode='cover'
+        style={styles.backdrop}>
+          {/* BG and form container */}
+          <View style={styles.overlay}>
+            <View style={styles.row}>
+              <Text style={styles.mainText}>
+                Zip: {this.state.zip}
+              </Text>
+              <View style={styles.zipContainer}>
+                <TextInput
+                  style={[styles.mainText, styles.zipCode]}
+                  returnKeyType="go"
+                  onSubmitEditing={this._handleTextChange}
+                  />
+              </View>
+            </View>
+              {/* Forecast component */}
+              <Forecast
+                main={this.state.forecast.zip}
+                description={this.state.forecast.description}
+                temp={this.state.forecast.temp}
+                />
+            </View>
+          </Image>
     );
   }
 }
 
-//Component Styling
+//Component styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -64,21 +84,41 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  backdrop: {
+    flex: 1,
+    flexDirection: 'column'
   },
-  input:{
-    fontSize: 20,
-    borderWidth: 2,
-    height: 40
+  overlay: {
+    paddingTop: 5,
+    backgroundColor: '#000',
+    opacity: 0.5,
+    flexDirection: 'column',
+    alignItems: 'center'
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  row: {
+    flexGrow: 1,
+    flexDirection: 'row',
+    flexWrap: 'nowrap',
+    alignItems: 'flex-start',
+    padding: 30
   },
+  zipContainer: {
+    flex: 1,
+    borderBottomColor: '#DDD',
+    borderBottomWidth: 1,
+    marginLeft: 5,
+    marginTop: 3
+  },
+  zipCode: {
+    width: 50,
+    height: 16
+  },
+  mainText: {
+    flex: 1,
+    fontSize: 16,
+    color: '#FFF'
+  }
+
 });
 
 AppRegistry.registerComponent('WeatherBasic', () => WeatherBasic);
