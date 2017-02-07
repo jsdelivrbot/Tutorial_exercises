@@ -20,6 +20,13 @@
 
   <!-- JavaScript -->
   <script type="text/javascript">
+
+    /* Notes ::
+       --------
+       1. All variables created here will be available in render.js
+       2. eRequire setup to avoid node conflict | eRequire will will mimic node
+       3. data will be loaded from source here and be available in render.js
+    */
     var eRequire = require;
     var dirName = __dirname;
     var dataLocation = require('path').resolve(__dirname, '..', 'data', 'data.json');
