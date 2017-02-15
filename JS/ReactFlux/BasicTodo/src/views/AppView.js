@@ -1,10 +1,16 @@
 import React from 'react';
 
-AppView = (props) => {
+import Header from './components/Header';
+import Main from './components/Main';
+import Footer from './components/Footer';
+
+const AppView = (props) => {
   return(
-    <div>
-      Test Component
-    </div>
+    <section>
+      <Header {...props} />
+      <Main {...props} />
+      <Footer {...props} />
+    </section>
   );
 }
 

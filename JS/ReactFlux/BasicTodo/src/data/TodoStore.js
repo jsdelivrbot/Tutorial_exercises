@@ -35,6 +35,6 @@ class TodoStore extends ReduceStore {
     }
   }
 
-}//end of class
+}//end TodoStore
 
 export default new TodoStore();
