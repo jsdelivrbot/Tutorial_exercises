@@ -4,7 +4,7 @@ import Header from './components/Header';
 import Main from './components/Main';
 import Footer from './components/Footer';
 
-const AppView = (props) => {
+function AppView(props){
   return(
     <section>
       <Header {...props} />

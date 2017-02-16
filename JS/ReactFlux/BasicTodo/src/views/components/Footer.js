@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Footer = (props) => {
+function Footer(props){
   if (props.todos.size === 0) {
     return null;
   }

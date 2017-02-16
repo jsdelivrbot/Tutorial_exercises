@@ -33,5 +33,16 @@ export default Styles = StyleSheet.create({
   inputRow: {
     flex: 1,
     flexDirection: 'row'
+  },
+  //LCD screen text
+  displayText: {
+    color: 'white',
+    fontSize: 38,
+    fontWeight: 'bold',
+    textAlign: 'right',
+    padding: 20
+  },
+  inputButtonHighlighted: {
+    backgroundColor: '#193441'
   }
 })

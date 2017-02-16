@@ -5,7 +5,7 @@ const Actions = {
   addTodo(text){
     TodoDispatcher.dispatch({
       type: TodoActionTypes.ADD_TODO,
-      text: text
+      text,
     });
   },
 
@@ -23,4 +23,6 @@ toggleTodo(id) {
   });
 }
 
-export deafult Actions;
+}
+
+export default Actions;

@@ -1,12 +1,14 @@
 import React from 'react';
 
-const Main = (props) => {
+function Main(props){
   if(props.todo.size === 0){
     return null;
   }
   return(
     <section id="main">
       <ul id="todo-list">
+
+        {/* */}
         {[...props.todos.values()].reverse().map(todo => (
           <li key={todo.id}>
             <div className="view">
@@ -15,7 +17,7 @@ const Main = (props) => {
                 type="checkbox"
                 checked={todo.complete}
                 onChange={
-                  // Empty function for now, we will implement this later.
+
                   () => {}
                 }
               />
@@ -23,13 +25,16 @@ const Main = (props) => {
               <button
                 className="destroy"
                 onClick={
-                  // Empty function for now, we will implement this later.
+
                   () => {}
                 }
               />
             </div>
           </li>
         ))}
+        {/* */}
+
+
       </ul>
     </section>
   )

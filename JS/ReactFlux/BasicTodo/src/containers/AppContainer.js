@@ -2,13 +2,13 @@ import AppView from '../views/AppView';
 import { Container } from 'flux/utils';
 import TodoStore from '../data/TodoStore';
 
-getStores = () => {
+function getStores(){
   return [
     TodoStore
   ];
 }
 
-getState = () => {
+function getState(){
   return {
     todos: TodoStore.getState()
   }

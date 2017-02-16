@@ -16,7 +16,9 @@ class TodoStore extends ReduceStore {
   reduce(state, action){
     switch (action.type) {
 
+      //Check to see if the Dispatcher has passed an ADD action
       case TodoActionTypes.ADD_TODO:
+      console.log('Called add to');
         if(!action.text){
           return state;
         }
