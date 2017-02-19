@@ -8,9 +8,21 @@ function getStores(){
   ];
 }
 
+/**
+* @function : 
+*/
 function getState(){
   return {
     todos: TodoStore.getState()
+  }
+},
+
+/**
+* @function : Test function checking out a new language
+*/
+function getTest(){
+  return {
+
   }
 }
 
