@@ -1,46 +1,46 @@
 //
-// Task Model
+//  User model
 //
 
 module.exports = (sequelize, DataType) => {
 
   /**
-  * @description: Define model datatype via sequalize
+  * @description: Define model user model via sequalize
   * @param 1    : Name of model
   * @param 2    : Object defining data attributes
   * @param 3    : Static model functions
   */
-  const Tasks = sequelize.define("Tasks", {
-    //
-    // Model datatypes and properties
-    //
+  const Users = sequelize.define("Users", {
     id:{
       type: DataType.INTEGER,
       primaryKey: true,
       autoIncrement: true
       },
-    title:{
+    name:{
       type: DataType.STRING,
       allowNull: false,
       validate: { notEmpty: true }
       },
-    done:{
-      type: DataType.BOOLEAN,
+    password:{
+      type: DataType.STRING,
       allowNull: false,
-      defaultValue: false
+      validate: { notEmpty: true }
+      },
+    email:{
+      type: DataType.STRING,
+      unique: true,
+      allowNull: false,
+      validate: { notEmpty: true }
       }
     },
-    //
-    // Static model functions
-    //
     {
-      classMethods: {
+      classMethods:{
         associate: (models) => {
-          Tasks.belongsTo(models.Users);
+          Users.hasMany(models.Tasks);
         }
       }
     });
 
-    return Tasks;
+    return Users
 
-}; //end
+}

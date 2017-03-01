@@ -4,27 +4,20 @@
 
 module.exports = app => {
 
-  //load Task model up --> See bottom
-  const Tasks = app.models.tasks;
+  //load model tasks from the db module
+  const Tasks = app.db.models.Tasks;
 
-  //Return list of tasks
+  //
+  // Retrieve tasks held in the sqlite db
+  //
   app.get('/tasks', (req,res) => {
-    Tasks.findAll({}, (tasks) => {
+
+    Tasks.findAll({}).then( tasks => {
       res.json({
         tasks: tasks
-      })
+      });
     });
-  })
 
-
+  });
 
 }
-
-/*
- Notes:
-
-  1. All modules pulled in via consign are avaialble in the app variables
-
-
-
-*/

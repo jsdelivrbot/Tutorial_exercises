@@ -9,9 +9,9 @@ const app = express();
 
 //Pull modules into app
 consign()
-  .include('db.js')
-  .then('models')
+  .include('libs/config.js')
+  .then('db.js')
   .then('libs/mwares.js')
   .then('routes')
   .then('libs/boot.js')
-  .into(app)
+  .into(app);

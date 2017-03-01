@@ -1,8 +1,6 @@
-/**
-*
-* APPLICATION ROUTES
-*
-**/
+//
+// General application routes
+//
 
 module.exports = app => {
 
