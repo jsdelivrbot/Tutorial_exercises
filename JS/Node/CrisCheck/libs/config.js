@@ -11,6 +11,7 @@ module.exports = {
     define: {
       underscored: true
     }
-  }
-
+  },
+  jwtSecret: "xop$-s1",
+  jwtSession: { session: false }
 };

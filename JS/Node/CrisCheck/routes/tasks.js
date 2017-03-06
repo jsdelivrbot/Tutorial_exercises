@@ -8,16 +8,72 @@ module.exports = app => {
   const Tasks = app.db.models.Tasks;
 
   //
-  // Retrieve tasks held in the sqlite db
+  // Generic task routes
   //
-  app.get('/tasks', (req,res) => {
-
-    Tasks.findAll({}).then( tasks => {
-      res.json({
-        tasks: tasks
-      });
-    });
-
+  app.route('/tasks').all((req,res, next) => {
+    delete req.body.id;
+    next();
+  })
+  // return all tasks held in the db
+  .get((req,res) => {
+    Tasks.findAll({})
+         .then((result) => {
+           return res.json(result);
+         })
+         .catch((error) => {
+           return res.status(412).json({ msg: error.message });
+         });
+  })
+  // Add task to the db and return result
+  .post((req,res) => {
+    Tasks.create(req.body)
+         .then((result) => {
+           return res.json(result);
+         })
+         .catch((error) => {
+           return res.status(422).json({ msg: error.message });
+         });
   });
 
-}
+  //
+  // Specific task routes
+  //
+  app.route('/tasks:id').all((req,res, next) => {
+    delete req.body.id;
+    next()
+  })
+  .get((req, res) => {
+    Tasks.findOne({ where: req.params })
+         .then((result) => {
+           if(result){
+             return es.json(result);
+           }
+           else{
+             return res.sendStatus(404);
+           }
+         })
+         .catch((error) => {
+           return res.status(412).json({ msg: error.message })
+         });
+  })
+  .put((req,res) => {
+    Tasks.update(req.body, { where: req.params })
+        .then((result) => {
+          return res.sendStatus(204)
+        })
+        .catch((error) => {
+          return res.status(412).json({msg: error.message});
+        })
+  })
+  .delete((req,res) => {
+    Task.destroy({where: req.params})
+        .then((result) => {
+          return res.sendStatus(204);
+        })
+        .catch((error) => {
+          return res.status(412).json({msg: error.message });
+        })
+  })
+
+
+}//end of export
