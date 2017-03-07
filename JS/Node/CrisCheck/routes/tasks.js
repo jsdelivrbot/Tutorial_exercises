@@ -12,11 +12,14 @@ module.exports = app => {
   //
   app.route('/tasks').all((req,res, next) => {
     delete req.body.id;
+    app.auth.authenticate();
     next();
   })
   // return all tasks held in the db
   .get((req,res) => {
-    Tasks.findAll({})
+    Tasks.findAll({
+          where: { user_id: req.user.id }
+         })
          .then((result) => {
            return res.json(result);
          })
@@ -26,6 +29,7 @@ module.exports = app => {
   })
   // Add task to the db and return result
   .post((req,res) => {
+    req.body.user_id = req.user.id;
     Tasks.create(req.body)
          .then((result) => {
            return res.json(result);
@@ -40,13 +44,16 @@ module.exports = app => {
   //
   app.route('/tasks:id').all((req,res, next) => {
     delete req.body.id;
+    app.auth.authenticate();
     next()
   })
   .get((req, res) => {
-    Tasks.findOne({ where: req.params })
+    Tasks.findOne({
+        where: { id: req.params.id, user_id: req.user.id }
+         })
          .then((result) => {
            if(result){
-             return es.json(result);
+             return res.json(result);
            }
            else{
              return res.sendStatus(404);
@@ -57,7 +64,9 @@ module.exports = app => {
          });
   })
   .put((req,res) => {
-    Tasks.update(req.body, { where: req.params })
+    Tasks.update(req.body, {
+      where: { id: req.params.id, user_id: req.user.id } 
+        })
         .then((result) => {
           return res.sendStatus(204)
         })
