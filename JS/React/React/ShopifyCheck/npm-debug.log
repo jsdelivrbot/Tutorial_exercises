@@ -1,0 +1,46 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'start' ]
+2 info using npm@3.10.10
+3 info using node@v7.2.1
+4 verbose run-script [ 'prestart', 'start', 'poststart' ]
+5 info lifecycle Shopify@1.0.0~prestart: Shopify@1.0.0
+6 silly lifecycle Shopify@1.0.0~prestart: no script for prestart, continuing
+7 info lifecycle Shopify@1.0.0~start: Shopify@1.0.0
+8 verbose lifecycle Shopify@1.0.0~start: unsafe-perm in lifecycle true
+9 verbose lifecycle Shopify@1.0.0~start: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/home/charlie/Desktop/Tutorial_exercises/JS/React/React-Redux-Flux/Redux/ShopifyCheck/node_modules/.bin:/home/charlie/.local/share/umake/bin:/usr/local/heroku/bin:/home/charlie/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/charlie/.rvm/bin:/home/charlie/.rvm/bin
+10 verbose lifecycle Shopify@1.0.0~start: CWD: /home/charlie/Desktop/Tutorial_exercises/JS/React/React-Redux-Flux/Redux/ShopifyCheck
+11 silly lifecycle Shopify@1.0.0~start: Args: [ '-c',
+11 silly lifecycle   'node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js' ]
+12 silly lifecycle Shopify@1.0.0~start: Returned: code: 1  signal: null
+13 info lifecycle Shopify@1.0.0~start: Failed to exec start script
+14 verbose stack Error: Shopify@1.0.0 start: `node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js`
+14 verbose stack Exit status 1
+14 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:255:16)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at EventEmitter.emit (events.js:191:7)
+14 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/spawn.js:40:14)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at ChildProcess.emit (events.js:191:7)
+14 verbose stack     at maybeClose (internal/child_process.js:885:16)
+14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
+15 verbose pkgid Shopify@1.0.0
+16 verbose cwd /home/charlie/Desktop/Tutorial_exercises/JS/React/React-Redux-Flux/Redux/ShopifyCheck
+17 error Linux 3.19.0-32-generic
+18 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "start"
+19 error node v7.2.1
+20 error npm  v3.10.10
+21 error code ELIFECYCLE
+22 error Shopify@1.0.0 start: `node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js`
+22 error Exit status 1
+23 error Failed at the Shopify@1.0.0 start script 'node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js'.
+23 error Make sure you have the latest version of node.js and npm installed.
+23 error If you do, this is most likely a problem with the Shopify package,
+23 error not with npm itself.
+23 error Tell the author that this fails on your system:
+23 error     node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js
+23 error You can get information on how to open an issue for this project with:
+23 error     npm bugs Shopify
+23 error Or if that isn't available, you can get their info via:
+23 error     npm owner ls Shopify
+23 error There is likely additional logging output above.
+24 verbose exit [ 1, true ]
