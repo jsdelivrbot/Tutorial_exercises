@@ -6,11 +6,12 @@
 
 //Application imports
 import React, { Component } from 'react';
+import styles from './app.css';
 
-
-//Componet imports
-import SearchBar from './SearchBar';
-
+//Component imports
+import SearchBar from './SearchBar/SearchBar';
+import SongItem from './SongItem/songItem';
+import ReturnSongs from '../utils/returnSongs';
 
 
 export default class App extends Component {
@@ -20,20 +21,26 @@ export default class App extends Component {
   //
   constructor(props) {
     super(props);
+
     this.state = {
       initialMessage: 'greeting',
-      songs: null
+      songs: '',
+      tracks: {}
     };
+
     this._updateText = this._updateText.bind(this);
     this._getSongs = this._getSongs.bind(this);
   }
 
   //
-  // Get songs from spotify API
+  // Return songs from spotify API utils promise
   //
   _getSongs(){
     const { song } = this.state;
-    console.log(`song is ${song}`);
+    ReturnSongs(song)
+        .then(( {tracks} ) => {
+          this.setState({ tracks });
+        })
   }
 
   //
@@ -47,19 +54,26 @@ export default class App extends Component {
     })
   }
 
+
   //
   // Render application components
   //
   render() {
-    const { initialMessage, itemSelect } = this.state;
+    const { initialMessage, itemSelect, tracks } = this.state;
+
     return (
-      <div>
+      <div className={styles.root}>
+
+        <p>{itemSelect}</p>
+
         <SearchBar
           updateText={this._updateText}
           getSongs={this._getSongs}
           />
-        <p>{itemSelect}</p>
-        {initialMessage}
+
+        { tracks.items && <SongItem songData={tracks.items[0]}/> }
+
+
       </div>
     );
   }

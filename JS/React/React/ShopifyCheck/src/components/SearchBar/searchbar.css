@@ -1,0 +1,25 @@
+.root{
+  display: flex;
+  align-items: center;
+  margin: 10px auto;
+}
+
+.root input {
+  border: 1px solid green;
+  text-align: center;
+  color: green;
+}
+
+.root button {
+  border: 1px solid green;
+  border-left: 0;
+  background: green;
+  color: white;
+  transition: all 0.5s ease 0s;
+}
+
+.root button:hover {
+  cursor: pointer;
+  color: green;
+  background: white;
+}
