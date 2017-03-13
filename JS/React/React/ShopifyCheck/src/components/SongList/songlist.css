@@ -1,0 +1,29 @@
+.root {
+  display: flex;
+  height: 290px;
+  width: 100%;
+  overflow: scroll;
+  margin-top: 1.5rem;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.root:hover{
+  cursor: pointer;
+}
+
+.eachSong {
+  display: flex;
+  flex-direction: column;
+}
+
+.image {
+  height: 150px;
+  width: 150px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.songDescription {
+  justify-content: center;
+  color: #d3d3d3;
+}

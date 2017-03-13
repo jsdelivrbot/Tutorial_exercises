@@ -1,6 +1,6 @@
 /**
 *
-* @class : Main container for Shopify application
+* @class : Main container for Spotify application
 *
 */
 
@@ -12,6 +12,7 @@ import styles from './app.css';
 import SearchBar from './SearchBar/SearchBar';
 import SongItem from './SongItem/songItem';
 import ReturnSongs from '../utils/returnSongs';
+import SongList from './SongList/songlist';
 
 
 export default class App extends Component {
@@ -25,11 +26,13 @@ export default class App extends Component {
     this.state = {
       initialMessage: 'greeting',
       songs: '',
-      tracks: {}
+      tracks: {},
+      songPosition: 0
     };
 
     this._updateText = this._updateText.bind(this);
     this._getSongs = this._getSongs.bind(this);
+    this._selectSong = this._selectSong.bind(this);
   }
 
   //
@@ -54,25 +57,39 @@ export default class App extends Component {
     })
   }
 
+  //
+  // Receive selected index from SongList component
+  //
+  _selectSong(songPosition){
+    console.log(songPosition);
+    this.setState({ songPosition })
+  }
+
 
   //
   // Render application components
   //
   render() {
-    const { initialMessage, itemSelect, tracks } = this.state;
+
+    //Destructure componenet state
+    const { initialMessage, itemSelect, tracks, songPosition } = this.state;
 
     return (
       <div className={styles.root}>
 
-        <p>{itemSelect}</p>
-
+        {/* Header /searchbar */}
         <SearchBar
           updateText={this._updateText}
-          getSongs={this._getSongs}
-          />
+          getSongs={this._getSongs} />
 
-        { tracks.items && <SongItem songData={tracks.items[0]}/> }
+        {/* Conditional tracks */}
+        { tracks.items && <SongItem
+                              songData={tracks.items[songPosition]} /> }
 
+        {/* song playlist */}
+        { tracks.items && <SongList
+                              songArray={tracks.items}
+                              selectSong={this._selectSong} /> }
 
       </div>
     );
