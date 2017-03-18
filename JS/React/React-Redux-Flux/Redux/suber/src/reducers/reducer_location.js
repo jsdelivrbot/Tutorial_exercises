@@ -12,13 +12,18 @@ const INITSTATE = {
   endLatitude: ''
 }
 
-//main
+//reducer actions
+import { ADD_LOCATION } from '../actions'; 
+
+
 export default (state = INITSTATE, action) => {
 
   switch(action.type)
   {
+    case ADD_LOCATION:
+      return { ...state, ...action.payload }
     default:
       return state;
   }
 
-}
+}//end of class

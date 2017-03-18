@@ -11,9 +11,9 @@ import { Route, IndexRoute } from 'react-router';
 import App from '../components/app';
 import Location from '../container/locations/location';
 
-
+//export application routes
 export default (
-  <Route path={'/'} component={App}>
-    <Route path={'locations'} component={Location} />
+  <Route path="/" component={App}>
+    <IndexRoute component={Location} />
   </Route>
 )

@@ -14,9 +14,9 @@ export default class App extends Component {
         <section className="header-bar">
           <h2> suber estimation </h2>
         </section>
-        {this.props.children}
+        <section className="main-content">
+          {this.props.children}
+        </section>
       </div>
-    )
-  }
-
+    )}
 }
