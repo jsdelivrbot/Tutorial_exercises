@@ -6,8 +6,8 @@
 
 import { combineReducers } from 'redux';
 
-import locationReducer from './reducer_services';
-import serviceReducer from './reducer_location';
+import locationReducer from './reducer_location';
+import serviceReducer from './reducer_services';
 
 const rootReducer = combineReducers({
   location: locationReducer,

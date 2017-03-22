@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 
 //Redux modules
 import { connect } from 'react-redux';
-import { addLocation } from '../../actions';
+import { addLocation, findServices } from '../../actions';
 
 //External modules
 import AutoComplete from 'react-google-autocomplete';
@@ -30,13 +30,23 @@ class Location extends Component {
   //Create an instantion of locationManager class
   constructor(props){
     super(props);
+    this.state = { 
+      name: ''
+     }
     try{
       this.locationManager = new LocationUtil();
     }catch(e){
       throw Location.util.raiseError('LocationUtil did not load correctly', 'LocationUtil.js')
     }
     this._retrieveSelectedLocation = this._retrieveSelectedLocation.bind(this);
+    this._setName = this._setName.bind(this);
   }
+
+  //Set state and span name on user input change
+  _setName(e){
+    this.setState({ name: e.target.value });
+  }
+
 
   //Set user location based on locationManagers returned
   //area
@@ -46,7 +56,6 @@ class Location extends Component {
 
   //Retrieve lat/lng from auto complete //possibly start and end 
   _retrieveSelectedLocation(location, end){
-    console.log(location);
     const { lat, lng } = location.geometry.location;
     switch(end){
       case 'start':
@@ -56,8 +65,8 @@ class Location extends Component {
         break;
       case 'end': 
         const endLat = lat();
-        const endlng = lng();
-        this.props.addLocationAction({ endLat, endlng });
+        const endLng = lng();
+        this.props.addLocationAction({ endLat, endLng });
         break;   
     }
   }
@@ -66,27 +75,44 @@ class Location extends Component {
   render(){
     return(
       <section className="location-container">
-        <h4> location component working </h4>
+
+        {/* Name selection */}
+        <div className="location-name-wrap">
+          <span> Name:: </span>
+          <input className="location-name-input"
+            value={this.state.name}
+            onChange={(e) => this._setName(e)}/>
+        </div>
+        
+        {/* Start destination input */}
         <AutoComplete
           style={googAutoStyles}
           type={['address']}
           componentRestrictions={this._set()}
           onPlaceSelected={(place) => {this._retrieveSelectedLocation(place, 'start') }}
         />
+
+        {/* End destination input */}
         <AutoComplete
           style={googAutoStyles}
           type={['address']}
           componentRestrictions={this._set()}
           onPlaceSelected={(place) => {this._retrieveSelectedLocation(place,'end')}}
         />
+
+        {/* Submit to application */}
+        <button className="location-submit"
+          onClick={()=> this.props.findServiceAction(this.state.name)}> 
+        Submit </button>
       </section>
     )}
 
 }//end of class
 
-//Map add_location to to props
+//Map add_location and findService action to component props
 const mapDispatchToProps = (dispatchEvent) => ({
-  addLocationAction: (location) => dispatchEvent(addLocation(location))
+  addLocationAction: (location) => dispatchEvent(addLocation(location)),
+  findServiceAction: (name) => dispatchEvent(findServices(name))
 })
 
 export default connect(null, mapDispatchToProps)(Location);
