@@ -11,10 +11,11 @@ import { Route, IndexRoute } from 'react-router';
 import App from '../components/app';
 import Header from '../container/header';
 import Resources from '../components/resources';
+import RequireAuth from '../components/requireAuth';
 
 //export application routes
 export default (
   <Route path="/" component={App}>
-    <Route path="resources" component={Resources} />
+    <Route path="resources" component={RequireAuth(Resources)} />
   </Route>
 )

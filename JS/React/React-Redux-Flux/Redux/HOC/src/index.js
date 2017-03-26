@@ -10,7 +10,6 @@ import ReactDOM from 'react-dom';
 import { Router, browserHistory } from 'react-router';
 
 //Redux/middleware components install
-import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 

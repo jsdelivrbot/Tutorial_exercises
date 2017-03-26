@@ -9,7 +9,7 @@ import { combineReducers } from 'redux';
 import authenticationReducer from './reducer_authentication';
 
 const rootReducer = combineReducers({
-    authentication: authenticationReducer
+    reduxAuthentication: authenticationReducer
 })
 
 export default rootReducer;
