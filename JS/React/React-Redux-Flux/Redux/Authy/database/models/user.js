@@ -6,7 +6,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const encrypt = require('bcrypt-nodejs');
 
-//Define user schema 
+//
+// User Schema
+//
 const userSchema = new Schema({
 	email: {
 			type: String, 
@@ -16,7 +18,10 @@ const userSchema = new Schema({
 	password: String
 });
 
-//Implement bycrypt in pre Schema hookup
+
+//
+// Bcrypt pre save hook
+//
 userSchema.pre('save', function(next){
 
 	//func was called in the user schema 
@@ -39,10 +44,26 @@ userSchema.pre('save', function(next){
 			user.password = hash;
 			next();
 		})
-	})
-	
+	})	
 })
 
-const model = mongoose.model('User', userSchema);
 
+//
+// Compare encrypted password with plaintext 
+//
+userSchema.methods.comparePassword = function(userPassword, cb){
+
+	encrypt.compare(userPassword, this.password, (err, isMatched) => {
+
+		if(err){return cb(err)}
+		cb(null, isMatched)
+
+	})
+
+}
+
+
+
+// Create user model and export
+const model = mongoose.model('User', userSchema);
 module.exports = model;
