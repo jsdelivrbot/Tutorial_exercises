@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field, Form } from 'redux-form'
+import { signinUser } from '../actions/index';
 
  class Signin extends Component {
 
@@ -10,11 +11,14 @@ import { reduxForm, Field, Form } from 'redux-form'
      this._handleFormSubmit = this._handleFormSubmit.bind(this);
    }
 
-   //Handle form logic
+   //Pass user data to signup action
    _handleFormSubmit({email,password}){
-     //
+     if(email && password){
+       this.props.signinUserAction({ email: email, password: password })
+     }
    }
 
+  //render form
   render(){
 
     const { handleSubmit } = this.props;
@@ -57,8 +61,13 @@ const mapStateToProps = reduxState => {
   }
 }
 
+//map dispatch actions to props
+const mapDispatchToProps = dispatchEvent => ({
+  signinUserAction: (user) => dispatchEvent(signinUser(user))
+})
+
 Signin = reduxForm({
   form: 'signin'
 })(Signin)
 
-export default connect(mapStateToProps, null)(Signin);
+export default connect(mapStateToProps, mapDispatchToProps)(Signin);
