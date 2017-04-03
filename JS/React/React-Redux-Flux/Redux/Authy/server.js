@@ -2,6 +2,7 @@
 const express = require('express');
 const http = require('http');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const app = express();
@@ -15,6 +16,7 @@ db.on('error', (err) => console.log(`DB error::${err}`) );
 db.on('disconnected', () => console.log('disconnected') );
 
 //Setup server middleware
+app.use(cors());
 app.use(morgan('combined'));
 app.use(bodyParser.json({type: '*/*'})); 
 

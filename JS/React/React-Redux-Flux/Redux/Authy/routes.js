@@ -20,9 +20,8 @@ module.exports = (app) => {
 	app.post('/signin', requireSignin, Authentication.signin );
 
 	app.get('/', requireAuth, (req,res) => {
-		console.log();
 		res.json({
-			"message": 'logged in'
+			"message": 'Super secret code is booby loo'
 		})
 	})
 
