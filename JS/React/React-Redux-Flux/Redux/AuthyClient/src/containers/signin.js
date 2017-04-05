@@ -1,3 +1,12 @@
+/**
+ *
+ *  @summary : Handle sign in logic to the application
+ * 	@actions : (1) signinUserAction 
+ *  @state   : (1) reduxForm
+ *             (2) errorMessage           
+ * 
+ */
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field, Form } from 'redux-form'
@@ -18,6 +27,17 @@ import { signinUser } from '../actions/index';
      }
    }
 
+   //Render alert when invalid date entered
+   _alertRender(){
+     if(this.props.errorMessage){
+       return(
+         <div className="alert alert-danger">
+            <strong> Invalid </strong>{this.props.errorMessage}
+         </div>
+       )
+     }
+   }
+
   //render form
   render(){
 
@@ -26,18 +46,25 @@ import { signinUser } from '../actions/index';
     return(
       <form className="signup-form"
             onSubmit={handleSubmit(this._handleFormSubmit)}>
+
+        {/* Email field */}
         <fieldset className="form-group">
           <label> Email </label>
           <Field name="email"
                  type="email"
                  component={_renderInput}/>
         </fieldset>
+
+        {/* Password field */}
         <fieldset className="form-group">
           <label> Password </label>
           <Field name="password"
                  type="password"
                  component={_renderInput}/>
         </fieldset>
+
+        {/* Button and boolean alert */}
+        {this._alertRender()}
         <button className="btn btn-primary" action="submit">Sign in</button>
       </form>
     )}
@@ -54,17 +81,18 @@ const _renderInput = field => {
   )
 }
 
-//map state to props
+//Map error state to component props
 const mapStateToProps = reduxState => {
   return {
-    errorMessage: reduxState.form
+    errorMessage: reduxState.auth.error
   }
 }
 
-//map dispatch actions to props
+//Map dispatch actions to props
 const mapDispatchToProps = dispatchEvent => ({
   signinUserAction: (user) => dispatchEvent(signinUser(user))
 })
+
 
 Signin = reduxForm({
   form: 'signin'

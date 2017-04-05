@@ -1,3 +1,12 @@
+/**
+ *
+ *  @summary : Handle actions for application authentication
+ * 	@actions : (1) signinUser
+ *             (2) signoutUser
+ *             (3) signupUser
+ * 
+ */
+
 //Import Action enums
 import { AUTH_USER, UNAUTH_USER, AUTH_ERROR } from './types';
 
@@ -37,13 +46,15 @@ export function signinUser({ email, password }){
            }
            //User has not been authenticated
            else{
-
+             dispatch({
+               type: UNAUTH_USER
+             })
            }
          })
          .catch((err) => {
            dispatch({
              type: AUTH_ERROR,
-             payload: 'Incorrect login information provided'
+             payload: "Error signing in"
            })
          })
 
@@ -51,10 +62,12 @@ export function signinUser({ email, password }){
 
 }//end of signin user function
 
-//Return Error action
-export function authError(errorMessage){
-  return {
-    type: AUTH_ERROR,
-    payload: errorMessage
+
+// Change signin boolean to false and remove token from local 
+// storage
+export function signoutUser(){
+  localStorage.removeItem('token');
+  return{
+    type: UNAUTH_USER, 
   }
 }

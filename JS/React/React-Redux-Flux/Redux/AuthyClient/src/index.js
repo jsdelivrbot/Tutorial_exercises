@@ -1,3 +1,8 @@
+/**
+ *
+ *  @summary : Scaffold React/Redux and inject routes into application
+ */
+
 //React modules
 import React from 'react';
 import ReactDOM from 'react-dom';
