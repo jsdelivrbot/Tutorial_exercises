@@ -13,16 +13,24 @@ const requireSignin = passport.authenticate('local', { session: false });
 
 module.exports = (app) => {
 
-	// user signup 
+	// user signup
 	app.post('/signup', Authentication.signup );
 
 	// User signup
 	app.post('/signin', requireSignin, Authentication.signin );
 
+	//Simulate authenticated request
 	app.get('/', requireAuth, (req,res) => {
 		res.json({
 			"message": 'Super secret code is booby loo'
 		})
 	})
+
+	//Provide user specific details page
+	app.get('/user', requireAuth, (req,res) => {
+		res.json({
+			"message": "user detail page"
+		})
+	});
 
 }

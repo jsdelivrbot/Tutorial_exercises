@@ -12,6 +12,9 @@ import { Router, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 
+//Actions
+import { AUTH_USER } from './actions/types';
+
 //middleware modules
 import reduxThunk from 'redux-thunk'
 
@@ -26,7 +29,12 @@ const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
 //Inject reducers into store and call Redux Dev tools
 const store = createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
+//Retrieve token from local storage is exists and dispatch AUTH_USER action to ensure
+//page refreshes do not break token logic
+const token = localStorage.getItem('token');
+token ? store.dispatch({ type: AUTH_USER }) : null
 
+//Render react application to .container
 ReactDOM.render(
   <Provider store={store}>
     <Router routes={routes} history={browserHistory} />

@@ -1,10 +1,10 @@
 /**
  *
  *  @summary : Handle sign in logic to the application
- * 	@actions : (1) signinUserAction 
+ * 	@actions : (1) signinUserAction
  *  @state   : (1) reduxForm
- *             (2) errorMessage           
- * 
+ *             (2) errorMessage
+ *
  */
 
 import React, { Component } from 'react';

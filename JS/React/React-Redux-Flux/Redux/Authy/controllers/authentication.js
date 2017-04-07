@@ -21,25 +21,25 @@ exports.signup = (req,res,next) => {
 		res.status(422).json({ message: "Email and password are required" })
 	}
 
-	//Check whether user exists and either return error 
+	//Check whether user exists and either return error
 	//or create new user
 	User.findOne({ email: email }, (err,existingUser) => {
-		
+
 		//Return on error or existing user
 		if(err){ return next(err); }
-		if(existingUser){ return res.json({ message: "User email already exists" }); }
-		
+		if(existingUser){ return res.status(422).send({ message: "User email already exists" }); }
+
 		//create new user and save to mongoDB
 		const user = new User({
 			email,
 			password
 		});
-		
+
 		//Save user to the DB
 		user.save((err)=> {
 			if(err){ return next(err); }
-			res.json({ 
-				message: user.id, 
+			res.json({
+				message: user.id,
 				token: tokenForUser(user)
 			});
 		});
@@ -58,8 +58,8 @@ exports.signin = (req,res,next) => {
 
 }
 
-//Return encoded version 
+//Return encoded version
 function tokenForUser(user){
 	const timeStamp = new Date().getTime();
 	return jwt.encode({ sub: user.id, iat: timeStamp }, config.secret)
-} 
+}
