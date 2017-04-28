@@ -1,15 +1,4 @@
-import React from 'react';
-import {View, Text, AppRegistry } from 'react-native';
-
-import Header from './src/components/header';
-
-const App = () => {
-	return(
-		<View>
-			<Header/>
-			<Text> Basic body </Text>
-		</View>
-	)
-}
+import { AppRegistry } from 'react-native';
+import App from './app';
 
 AppRegistry.registerComponent('AlbumFinder', () => App);

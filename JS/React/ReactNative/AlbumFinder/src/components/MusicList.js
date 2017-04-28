@@ -1,32 +1,64 @@
+/**
+*
+* @class: Album controller and main injection point of album data
+*
+*/
+
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { ScrollView, Text } from 'react-native';
 import axios from 'axios';
-import config from '../../config';
+
+import { API_URL } from '../../config';
+import AlbumDetail from './AlbumDetail';
 
 export default class AlbumList extends Component {
 
 	constructor(props){
 		super(props);
-		this.state = { response: '' };
+		this.state = { albums: [], error: false };
 	}
 
-	componetWillMount(){
-		_fetchData();
+  //Call component methods on initial load
+	componentWillMount(){
+		this._fetchData();
 	}
 
 	//HTTP request to external API to
 	//retreive data list
 	_fetchData(){
-		axios.get(config.API_URL)
-		     .then((response) => this.setState({ response }) );
+		axios.get(API_URL)
+		     .then((response) => {
+					 this.setState({ albums: response.data })
+         }).catch((error) => this.setState({ error: error }));
 	}
 
+  //Return Album component from orignal object of
+  //albums
+  _iterateAlbums(){
+    return this.state.albums.map((album) => {
+      return (
+        <AlbumDetail key={album.title} album={album} />
+      )
+    })
+  }
+
 	render(){
-		return(
-			<View>
-				<Text> Music List </Text>
-				<Text> {this.state.response} </Text>
-			</View>
-		)
-	}
-}
+
+    //Display error in event of API call failure
+    if(this.state.error){
+			console.log(this.state.error)
+      return(
+        <Text>Error loading </Text>
+      )
+    }
+    //Render list objects from API
+    else{
+      return(
+        <ScrollView>
+          {this._iterateAlbums()}
+        </ScrollView>
+      )
+    }
+
+  }//end of render
+}//EOC
