@@ -1,0 +1,27 @@
+{
+  "users": [
+    {
+      "id": "30",
+      "firstName": "Lenny",
+      "age": 20,
+      "companyId": "2"
+    },
+    {
+      "firstName": "derick",
+      "age": 26,
+      "id": "BJ39fPJPZ"
+    }
+  ],
+  "companies": [
+    {
+      "id": "1",
+      "name": "Apple",
+      "description": "Apple stuff"
+    },
+    {
+      "id": "2",
+      "name": "Google",
+      "description": "Google stuff"
+    }
+  ]
+}
