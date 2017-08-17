@@ -1,3 +1,10 @@
+/**
+*
+*
+* @class Component to add lyric and call GraphQL mutation to add song
+*
+*/
+
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -11,6 +18,7 @@ const mutation = gql`
       lyrics {
         id
         content
+        likes
       }
     }
   }
@@ -40,7 +48,7 @@ class Lyric extends Component {
 
   /**
   *
-  * @method:
+  * @method: Render Lyric creation component
   *
   */
   render() {

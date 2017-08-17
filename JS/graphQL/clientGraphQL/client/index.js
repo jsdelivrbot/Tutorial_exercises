@@ -18,7 +18,10 @@ import SongCreate from './components/SongCreate';
 import SongDetail from './components/SongDetail';
 
 //create new instance and pass to apollo provider
-const client = new ApolloClient({});
+// add hook to add id field to each piece of data
+const client = new ApolloClient({
+  dataIdFromObject: o => o.id
+});
 
 //wrap main component in apollo provider
 const Root = () => {

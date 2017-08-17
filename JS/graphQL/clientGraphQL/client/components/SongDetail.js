@@ -1,14 +1,27 @@
+/**
+*
+*
+* @class: Render detail card for a single song
+*
+*/
+
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
 import { Link } from 'react-router';
 
-import Lyric from './Lyric';
+import LyricCreate from './LyricCreate';
+import LyricList from './LyricList';
 
 // Component Queries
 import FetchSingleSongQuery from '../queries/fetchSingleSong';
 
 class SongDetail extends Component {
 
+  /**
+  *
+  * @method: Render single song inner title
+  *
+  */
   _renderSong() {
     const { song } = this.props.data;
     return (
@@ -26,18 +39,16 @@ class SongDetail extends Component {
   */
   render() {
 
-    console.log(this.props);
-
     if (this.props.data.loading) {
       return <h3> Loading... </h3>
     }
+
     return (
       <div className="song-detail-wrapper">
         <Link to="/">Back</Link>
-        <div className="card">
-          {this._renderSong()}
-        </div>
-        <Lyric songID={this.props.data.song.id}/>
+        <div className="card"> {this._renderSong()} </div>
+        <LyricList lyrics={this.props.data.song.lyrics}/>
+        <LyricCreate songID={this.props.data.song.id}/>
       </div>
     )
   }
