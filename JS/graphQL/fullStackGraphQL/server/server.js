@@ -1,3 +1,10 @@
+/**
+*
+*
+* @summary: Initial server config
+*
+*/
+
 const express = require('express');
 const models = require('./models');
 const expressGraphQL = require('express-graphql');
@@ -7,12 +14,13 @@ const passport = require('passport');
 const passportConfig = require('./services/auth');
 const MongoStore = require('connect-mongo')(session);
 const schema = require('./schema/schema');
+const CREDS = require('../privateCreds');
 
 // Create a new Express application
 const app = express();
 
 // Replace with your mongoLab URI
-const MONGO_URI = '';
+const MONGO_URI = CREDS.MONGO;
 
 // Mongoose's built in promise library is deprecated, replace it with ES2015 Promise
 mongoose.Promise = global.Promise;

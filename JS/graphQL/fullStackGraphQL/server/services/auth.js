@@ -1,7 +1,15 @@
+/**
+*
+*
+* @summary: Logic for authentication 
+*
+*/
+
 const mongoose = require('mongoose');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
+//
 const User = mongoose.model('user');
 
 // SerializeUser is used to provide some identifying token that can be saved
