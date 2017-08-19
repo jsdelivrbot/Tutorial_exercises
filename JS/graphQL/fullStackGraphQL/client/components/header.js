@@ -38,10 +38,14 @@ class Header extends Component {
   // and call new buttons
   //
   _handleLogout() {
+
+		// call the mutate function on props and refetch the
+		// query to update state
     this.props.mutate({
       refetchQueries: [{ query: QueryForUserLoggedIn }]
     });
-  }
+
+	}
 
   //
   // Render the header authorization buttons based on
@@ -73,8 +77,8 @@ class Header extends Component {
   //
   render() {
 
-    console.log(this.props);
-
+		// Return loading if query has not completed
+		// executing
     if(this.props.data.loading) {
       return ( <div><p>Loading...</p></div> );
     }
